@@ -1,4 +1,4 @@
-# terminal-style-portfolio
+# terminal-portfolio
 
 Han's portfolio: a single-page, terminal-style website. This repo is also a practice ground for AI-driven development, so most work is done by agents.
 

@@ -1,4 +1,4 @@
-# terminal-style-portfolio
+# terminal-portfolio
 
 This is my portfolio website in terminal style.
 

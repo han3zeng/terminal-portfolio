@@ -25,7 +25,7 @@ Which piece of the Claude Code harness to set up, and when. Rule of thumb: add a
 
 Do this early: base-path bugs are easier to find in an empty site.
 
-- [ ] GitHub Actions workflow that builds and deploys to Pages on push to `main`
+- [x] GitHub Actions workflow that builds and deploys to Pages on push to `main` — `.github/workflows/deploy.yml`
 - [ ] Repo Settings → Pages → Source: GitHub Actions
 - [ ] Open https://han3zeng.github.io/terminal-portfolio/ and check CSS and fonts load
 
