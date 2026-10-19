@@ -32,16 +32,16 @@ Do this early: base-path bugs are easier to find in an empty site.
 ### Step 3 — First spec
 
 - [x] Run `/product-exploration terminal-shell`
-- [ ] Review `docs/features/terminal-shell/spec.md`, especially the test cases
+- [x] Review `docs/features/terminal-shell/spec.md`, especially the test cases
 
 ### Step 4 — First feature with TDD, by hand
 
 Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 
-- [ ] Tests written and failing for the right reason
-- [ ] You reviewed and committed the tests
+- [x] Tests written and failing for the right reason
+- [x] You reviewed and committed the tests
 - [ ] Implementation passes; lint and typecheck pass
-- [ ] Write down where the agent struggled (see "Notes" below). That decides what Step 5 should contain.
+- [x] Write down where the agent struggled (see "Notes" below). That decides what Step 5 should contain.
 
 ### Step 5 — Automate the loop (after the first feature)
 

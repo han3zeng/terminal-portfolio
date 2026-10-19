@@ -196,6 +196,17 @@ type TerminalState = {
 
 - Tailwind `max-md:` covers ≤767px, but the PRD breakpoint is ≤768px. So add a custom variant in `globals.css`: `@custom-variant narrow (@media (width <= 768px));`. Then the prompt line uses `narrow:block`, and the `>` span is `hidden narrow:inline`.
 
+### Test hooks
+
+The stories find elements through these hooks, so the implementation must render them:
+
+- The input: role `textbox`, accessible name `Terminal input`.
+- `data-testid="terminal-entries"`: the `aria-live` region that holds the entries.
+- `data-testid="terminal-entry"`: one per entry. It contains `prompt`, `narrow-marker` (the `>`), `entry-command` (the raw input) and, when the entry has output, `entry-output`.
+- `data-testid="input-line"`: the live prompt and input row. It also contains `prompt` and `narrow-marker`.
+- `data-testid="input-mirror"`: the drawn input text. It contains `data-testid="terminal-cursor"`, whose text is `█` and whose `data-state` is `solid` or `hollow`.
+- `data-testid="terminal-hints"`: the Tab hints. It is not rendered when there are no hints.
+
 ### Dependencies
 
 None new. No lodash; use plain TS.
@@ -251,6 +262,7 @@ Test names start with the ID, e.g. `it("TC-TERMINAL-SHELL-3: ...")`. Stories use
 
 ### Test-tooling notes
 
-- TC-31 to TC-33 need a real viewport. Confirm that `@storybook/addon-vitest` applies story `globals.viewport` in browser mode. If it doesn't, set the viewport in the story with Vitest browser's `page.viewport()`.
-- TC-27 needs media emulation. Use Vitest browser's Playwright provider (`page.emulateMedia` through a custom command), or else check a `motion-reduce:animate-none` class and say in the test that it's a proxy.
+- TC-32 and TC-33 set the viewport with story `globals.viewport` and custom `parameters.viewport.options` (375, 768 and 1024px). `@storybook/addon-vitest` applies them in browser mode by calling `page.viewport()` (see `vitest-plugin/test-utils.js`).
+- TC-27 is a proxy: story tests can't emulate media queries, so it walks `document.styleSheets` and checks that a `prefers-reduced-motion: reduce` rule sets `animation: none` on the cursor. This handles `@layer` and CSS nesting, so a Tailwind `motion-reduce:` variant or plain CSS both pass.
+- TC-31 wraps the terminal in a 200px-high scrolling container, so either the terminal or its parent can be the element that scrolls.
 - Shortcut tests check `fireEvent.keyDown(...) === false` to assert that the default was prevented.
