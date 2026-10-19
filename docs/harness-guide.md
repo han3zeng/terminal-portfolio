@@ -31,7 +31,7 @@ Do this early: base-path bugs are easier to find in an empty site.
 
 ### Step 3 — First spec
 
-- [ ] Run `/product-exploration terminal-shell`
+- [x] Run `/product-exploration terminal-shell`
 - [ ] Review `docs/features/terminal-shell/spec.md`, especially the test cases
 
 ### Step 4 — First feature with TDD, by hand

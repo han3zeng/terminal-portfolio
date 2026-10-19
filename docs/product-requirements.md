@@ -22,25 +22,26 @@ These reference-site features are intentionally **not** included:
 - **UI-LAYOUT-1** The whole screen is a terminal window. No desktop background; the page should feel immersive, like using a terminal.
 - **UI-LAYOUT-2** On first load, the terminal runs `welcome` automatically. Typing `welcome` later prints the same output again.
 - **UI-LAYOUT-3** The input line stays below the latest output. When new output is added, the terminal scrolls to the bottom.
-- **UI-PROMPT-1** Every input line and every past command line is prefixed with the prompt `visitor@han3zeng:~$`.
+- **UI-PROMPT-1** Every input line and every past command line is prefixed with the prompt `visitor@han3zeng:~$`. At viewport width ≤ 768px, the prompt is on its own line and the input (or past command) is on the next line, prefixed with `>`. The input stays a single line and scrolls horizontally inside itself.
 - **UI-FONT-1** JetBrains Mono is used everywhere, with a 16px base size.
 
 ### Input behavior
 
 - **INPUT-1** Enter submits the current input. The submitted line (prompt + text) is printed, followed by the command's output.
-- **INPUT-2** Submitting an empty or whitespace-only input prints a new prompt line with no output and no error.
-- **INPUT-3** Commands are trimmed of leading/trailing spaces before matching. Matching is case-sensitive, like a real shell (`HELP` → command not found).
+- **INPUT-2** Submitting an empty or whitespace-only input prints a new prompt line with no output and no error. Empty input is not recorded in history.
+- **INPUT-3** Commands are trimmed of leading/trailing spaces before matching. Matching is case-sensitive, like a real shell (`HELP` → command not found). Arguments are separated by runs of whitespace (`connect  go 1` = `connect go 1`). History and `command not found: <input>` show the input exactly as typed.
 - **INPUT-4** Commands that take no arguments print `Usage: <command>` when given arguments (e.g. `about foo`).
 - **INPUT-5** Clicking anywhere on the page focuses the input.
 - **INPUT-6** Commands with side effects (`email`, `resume`, `themes set`, `connect go`) perform the side effect **only once, at the moment the command is submitted**. Re-rendering or replaying output must never re-trigger it.
 - **INPUT-7** Keyboard shortcuts (the Ctrl key on every platform, including macOS):
   - ↑ / ↓ cycle through previously submitted commands.
-  - Tab autocompletes a command. If several commands match, the matches are listed as hints below the input.
-  - Ctrl+L behaves like `clear`.
+  - Tab autocompletes command names only (never arguments). One match: the input becomes the command plus a trailing space. Several matches: the input is extended to their longest common prefix and the matches are listed as hints below the input.
+  - Ctrl+L clears the screen like `clear`, but keeps the current input text and is not recorded in history.
   - Ctrl+A moves the cursor to the start of the input.
   - Ctrl+K deletes everything from the cursor to the end of the input.
   - Each shortcut prevents the browser's default action for that key (e.g. Ctrl+A must not select the whole page).
-- **INPUT-8** The block cursor █ is drawn at the current caret position, not always at the end of the input, so it follows ←/→, Ctrl+A and Ctrl+K.
+  - Cmd/Meta combinations are not intercepted; they keep the browser's native behavior.
+- **INPUT-8** The block cursor █ is drawn at the current caret position, not always at the end of the input, so it follows ←/→, Ctrl+A and Ctrl+K. When the input is not focused, the cursor is a hollow, non-blinking block.
 
 ## Commands
 
