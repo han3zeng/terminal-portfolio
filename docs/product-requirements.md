@@ -6,7 +6,7 @@ Product requirements for my portfolio website, a terminal-style single page.
 - Reference product: https://terminal.satnaing.dev/ (source: https://github.com/satnaing/terminal-portfolio)
 - **This PRD has higher priority than the reference product.** Where they differ, follow this document.
 - Architecture and dev conventions live in `CLAUDE.md`, not here.
-- Items marked `TODO(Han)` are open decisions. Agents must not resolve them on their own; record them as open questions.
+- Items marked `TODO(Han)` are open decisions. Agents must not resolve them on their own; ask Han.
 
 ### Out of scope
 These reference-site features are intentionally **not** included:
@@ -20,24 +20,24 @@ These reference-site features are intentionally **not** included:
 - **UI-LAYOUT-1** The whole screen is a terminal window. No desktop background; the page should feel immersive, like using a terminal.
 - **UI-LAYOUT-2** On first load, the terminal runs `welcome` automatically. Typing `welcome` later prints the same output again.
 - **UI-LAYOUT-3** The input line stays below the latest output. When new output is added, the terminal scrolls to the bottom.
-- **UI-PROMPT-1** Every input line and every past command line is prefixed with the prompt.
-  > TODO(Han): prompt text. Suggested: `visitor@han3zeng:~$`
-- **UI-FONT-1** A single monospace font is used everywhere.
-  > TODO(Han): font and base size. Suggested: IBM Plex Mono (same as the reference) or JetBrains Mono, 16px.
+- **UI-PROMPT-1** Every input line and every past command line is prefixed with the prompt `visitor@han3zeng:~$`.
+- **UI-FONT-1** JetBrains Mono is used everywhere, with a 16px base size.
 
 ### Input behavior
 - **INPUT-1** Enter submits the current input. The submitted line (prompt + text) is printed, followed by the command's output.
 - **INPUT-2** Submitting an empty or whitespace-only input prints a new prompt line with no output and no error.
-- **INPUT-3** Commands are trimmed of leading/trailing spaces before matching.
-  > TODO(Han): case sensitivity. Suggested: case-sensitive, like a real shell (`HELP` → command not found).
+- **INPUT-3** Commands are trimmed of leading/trailing spaces before matching. Matching is case-sensitive, like a real shell (`HELP` → command not found).
 - **INPUT-4** Commands that take no arguments print `Usage: <command>` when given arguments (e.g. `about foo`).
 - **INPUT-5** Clicking anywhere on the page focuses the input.
-- **INPUT-6** Commands with side effects (`email`, `resume`, `themes set`) perform the side effect **only once, at the moment the command is submitted**. Re-rendering or replaying output must never re-trigger it.
-- **INPUT-7** Keyboard shortcuts:
-  > TODO(Han): mark each as in or out of scope. Suggested: all in.
-  > - ↑ / ↓ cycle through previously submitted commands
-  > - Tab autocompletes a command; if several match, list the matches as hints below the input
-  > - Ctrl+L behaves like `clear`
+- **INPUT-6** Commands with side effects (`email`, `resume`, `themes set`, `connect go`) perform the side effect **only once, at the moment the command is submitted**. Re-rendering or replaying output must never re-trigger it.
+- **INPUT-7** Keyboard shortcuts (the Ctrl key on every platform, including macOS):
+  - ↑ / ↓ cycle through previously submitted commands.
+  - Tab autocompletes a command. If several commands match, the matches are listed as hints below the input.
+  - Ctrl+L behaves like `clear`.
+  - Ctrl+A moves the cursor to the start of the input.
+  - Ctrl+K deletes everything from the cursor to the end of the input.
+  - Each shortcut prevents the browser's default action for that key (e.g. Ctrl+A must not select the whole page).
+- **INPUT-8** The block cursor █ is drawn at the current caret position, not always at the end of the input, so it follows ←/→, Ctrl+A and Ctrl+K.
 
 
 ## Commands
@@ -53,12 +53,25 @@ I love to make impacts through coding.
 ### clear — CMD-CLEAR
 **Action**
 - Removes every entry (prompt lines and outputs) from the terminal. The input line remains.
-  > TODO(Han): does `clear` also wipe the list shown by `history`? The reference wipes it; a real terminal does not. Suggested: keep history.
+- Like a real terminal, `clear` does **not** erase command history: `history` and ↑ / ↓ still show earlier commands.
 
 ### connect — CMD-CONNECT
-> TODO(Han): this command is undefined. Needed:
-> - the list of accounts and URLs (e.g. GitHub, LinkedIn)
-> - how a link is opened. Suggested: each URL is a clickable link opening in a new tab. Optionally, `connect go <n>` opens link n in a new tab, like the reference's `socials go <n>`.
+**Action**
+- `connect` prints the list below. Each URL is a clickable link that opens in a new tab.
+- `connect go <n>` opens link n in a new tab and prints nothing else.
+- `connect go <n>` with n outside 1–3, or any other argument, prints the two usage lines only.
+
+**Print**
+```
+Let's connect!
+
+1. Substack   - https://substack.com/@han3zeng
+2. GitHub     - https://github.com/han3zeng
+3. LinkedIn   - https://www.linkedin.com/in/han3zeng
+
+Usage: connect go <social-no>
+eg: connect go 1
+```
 
 ### education — CMD-EDUCATION
 **Print**
@@ -72,8 +85,7 @@ National Chi Nan University | TW | 2009 - 2012
 
 ### email — CMD-EMAIL
 **Action**
-- On submit, navigate to `mailto:<address>` (via `window.location.href`) to open the visitor's mail client.
-  > TODO(Han): email address.
+- On submit, navigate to `mailto:hanyutseng.hyt@gmail.com` (via `window.location.href`) to open the visitor's mail client.
 
 **Print**
 ```
@@ -81,7 +93,7 @@ My favorite quote from the show How I Met Your Mother
 Barney: "Ted, say 'I'm' your best friend."
 
 Well, hey, you! Be my best friend!
-Shoot me an email, let's chat: <address>
+Shoot me an email, let's chat: hanyutseng.hyt@gmail.com
 ```
 The address is printed so visitors without a mail client can still copy it.
 
@@ -113,7 +125,7 @@ Typical terminal commands
 ### history — CMD-HISTORY
 **Action**
 - Prints the submitted commands, oldest first, one per line, including the `history` command itself.
-  > TODO(Han): does the automatic `welcome` on first load count as a history entry? Suggested: yes (the reference does this).
+- The automatic `welcome` on first load counts as the first history entry.
 
 ### projects — CMD-PROJECTS
 **Action**
@@ -135,13 +147,12 @@ He was later recalled for making too many corny jokes.
 3. PRO360
 https://www.pro360.com.tw
 What?! You've never heard of PRO360?
-Well, there's a saying here: Thumbtack is our Figma.
+Well, there's a saying among us employees: Thumbtack is our Figma.
 
 4. TW Reporter
 https://www.twreporter.org/
 The non-profit digital news outlet in Taiwan, renowned for long-form investigative journalism.
 ```
-> TODO(Han): confirm the PRO360 joke. Did you mean "PRO360 is our Thumbtack"?
 
 ### pwd — CMD-PWD
 **Print**
@@ -151,8 +162,7 @@ The non-profit digital news outlet in Taiwan, renowned for long-form investigati
 
 ### resume — CMD-RESUME
 **Action**
-- On submit, download the resume file.
-  > TODO(Han): file name. Suggested: `public/resume.pdf`, served as `/resume.pdf`.
+- On submit, download `public/resume.pdf` (served as `<basePath>/resume.pdf`, see NFR-BUILD-2).
 
 **Print**
 ```
@@ -163,11 +173,10 @@ I am looking forward to hearing from you.
 ### themes — CMD-THEMES
 **Action**
 - `themes` lists all available themes and the usage below.
-- `themes set <theme_name>` switches the page theme immediately.
+- `themes set <theme_name>` switches the page theme immediately and prints nothing.
 - `themes set <unknown>` or any other argument prints the usage below.
+- The default theme on first visit is `dark`. The OS light/dark setting is ignored.
 - The chosen theme persists across page reloads.
-  > TODO(Han): default theme on first visit. Suggested: `dark` (not the OS setting).
-  > TODO(Han): output after a successful `themes set`. Suggested: none.
 
 **Print**
 ```
@@ -183,13 +192,11 @@ e.g. themes set matrix
 - Responsive breakpoint at 768px:
   - Desktop: viewport width > 768px
   - Tablet and mobile: viewport width ≤ 768px
-- Container is a flex box with two children: description and graphic.
-  - Desktop: `flex-direction: row` (description left, graphic right)
-  - Tablet and mobile: `flex-direction: column-reverse` (graphic above description)
-- The ASCII art must not overflow the viewport horizontally.
-  > TODO(Han): the banner is about 47 characters wide and will not fit a 375px phone at 16px. Pick one: (a) scale the font size down, (b) show a narrower banner on mobile, (c) hide the graphic on mobile. The reference hides both below 550px and shows a narrower banner.
+- Desktop: a flex row with two children. The description is on the left and the graphic on the right. The graphic is scaled so that it is the same height as the description section.
+- Tablet and mobile: the graphic is hidden, and the description shows the narrow banner instead of the wide one.
+- The ASCII art must never overflow the viewport horizontally.
 
-**Description section prints**
+**Description section prints** (desktop: wide banner)
 ```
  _   _    _    _   _   _____ _____ _   _  ____
 | | | |  / \  | \ | | |__  /| ____| \ | |/ ___|
@@ -202,8 +209,22 @@ Welcome to my terminal!
 Want to get to know me better? Type `help` to see how you can explore here.
 ```
 
-**Graphic section prints** the pattern below, scaled to fit beside the description on desktop.
-> TODO(Han): the original sentence was cut off ("which should be h…"). Suggested: on desktop, the graphic is no taller than the description section.
+**Narrow banner** (tablet and mobile), replacing the wide banner above:
+```
+ _   _    _    _   _
+| | | |  / \  | \ | |
+| |_| | / _ \ |  \| |
+|  _  |/ ___ \| |\  |
+|_| |_/_/   \_\_| \_|
+
+ _____ _____ _   _  ____
+|__  /| ____| \ | |/ ___|
+  / / |  _| |  \| | |  _
+ / /_ | |___| |\  | |_| |
+/____||_____|_| \_|\____|
+```
+
+**Graphic section prints** (desktop only)
 ```
                            __
                          _/  \_
@@ -305,4 +326,4 @@ Four themes: dark, light, matrix, ubuntu. Each defines the same semantic tokens.
 - **NFR-MOBILE-1** Tapping the terminal opens the on-screen keyboard. No horizontal page scroll at 375px width.
 - **NFR-SEO-1** The page has a title, meta description, Open Graph image, and favicon.
 - **NFR-BUILD-1** The site is fully statically generated (no server runtime).
-  > TODO(Han): deploy target (Vercel or GitHub Pages). GitHub Pages needs a `basePath`.
+- **NFR-BUILD-2** The site is deployed to GitHub Pages at https://han3zeng.github.io/terminal-style-portfolio/ by a GitHub Actions workflow on push to `main`. Because of that sub-path, the `basePath` is `/terminal-style-portfolio`, and every asset and file link (including `/resume.pdf`) must include it.
