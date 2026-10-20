@@ -48,10 +48,10 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 - [x] `spec:status` script: for each `TC-*` ID in the specs, shows **missing**, **failing** or **passing** (from Vitest's JSON report)
 - [x] Skill `implement-feature <feature>`: write tests → stop for review → implement until `spec:status` is green, max ~5 rounds without progress → check `git diff` on test files is empty
 
-### Step 6 — Visual verification (before `layout` and `themes`)
+### Step 6 — Visual verification (before `layout` and `themes`) ✅
 
-- [ ] Playwright MCP in `.mcp.json`. Claude can open the dev server, take screenshots, and check the four themes and the 375px layout. The `product-exploration` skill uses it as the only way to study the reference site: the live page, not its GitHub repo.
-- [ ] Re-verify the "Reference vs PRD" table in `docs/features/terminal-shell/spec.md` in the browser, replacing its source-code citations with observations.
+- [x] Playwright MCP in `.mcp.json`. Claude can open the dev server, take screenshots, and check the four themes and the 375px layout. The `product-exploration` skill uses it as the only way to study the reference site: the live page, not its GitHub repo.
+- [x] Re-verify the "Reference vs PRD" table in `docs/features/terminal-shell/spec.md` in the browser, replacing its source-code citations with observations.
 
 ### Step 7 — Reduce permission prompts (after a few sessions)
 
@@ -95,3 +95,4 @@ Small commands (`pwd`, `whoami`, `about`, `education`) can share one spec, or sk
 - The tests relied on test-environment behavior nobody had checked first: following a link closed the browser (TC-29), and the screen-size and reduced-motion workarounds were unverified. Skill idea: run the new tests once early, to tell environment problems apart from real failures.
 - Browser-only bugs (the TC-33 cursor) needed a throwaway debug story to diagnose. Skill idea: allow temporary debug stories, but they must be deleted. Step 6 (Playwright) will help further.
 - I had to stop and ask before changing an approved test. That worked. Skill idea: keep it as a hard rule. Any change to a test file means stop and ask.
+- Step 6: checking the reference in the browser found three things the source-code reading got wrong or missed: whitespace-only input prints `command not found:` (not an empty entry), typing doesn't end ↑/↓ navigation, and side effects visibly fire once. Lesson: the live page is better evidence than the source. Playwright writes its files to `.playwright-mcp/`, now gitignored. If a dev server is already running on port 3000, use it; a second `pnpm dev` fails.
