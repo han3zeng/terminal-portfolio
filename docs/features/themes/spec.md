@@ -134,12 +134,15 @@ src/themes/
   contrast.ts          contrastRatio(hexA, hexB): number   (pure, WCAG 2.x relative luminance)
   ThemesOutput.tsx     the command's Output component
   ThemeColorMeta.tsx   "use client"; keeps <meta name="theme-color"> in sync with resolvedTheme (effect only)
-  themeColorScript.ts  themeColorScript(): string — the inline <head> script (built from PALETTES, wrapped in try/catch)
+  storedTheme.ts       dropUnknownStoredTheme() (client) and themeHeadScript() (the inline <head> script), sharing one rule:
+                       remove an unknown stored theme, then set theme-color to the saved theme's bg
   *.test.ts            Vitest
   Themes.stories.tsx   Storybook interaction tests
-src/app/providers.tsx  "use client"; <ThemeProvider {...THEME_PROVIDER_PROPS}><ThemeColorMeta />{children}</ThemeProvider>
+src/app/providers.tsx  "use client"; dropUnknownStoredTheme() once, then <ThemeProvider {...THEME_PROVIDER_PROPS}><ThemeColorMeta />{children}</ThemeProvider>
 src/app/layout.tsx     wraps children in <Providers>; <html suppressHydrationWarning> (next-themes sets data-theme before hydration);
-                       <head><script dangerouslySetInnerHTML={{ __html: themeColorScript() }} /></head>
+                       <head><meta name="theme-color" content="#091321" /><script>{themeHeadScript()}</script></head>.
+                       The meta is rendered here instead of via metadata `viewport.themeColor`, so it is
+                       guaranteed to precede the script that updates it.
 scripts/theme-first-paint.test.ts   Vitest: builds, serves out/ under /terminal-portfolio/, drives headless Chromium (TC-THEMES-16)
 src/app/globals.css    the four [data-theme] blocks; `a { color: var(--accent) }`
 src/terminal/types.ts  CommandEffects; onSubmit(ctx, effects)
@@ -184,7 +187,7 @@ export const THEME_PROVIDER_PROPS = {
 
 ### Test hooks
 
-- Output text is checked through `innerText` of the entry output, so each output line must be its own block row and a blank line must render as one empty line (e.g. `<div><br></div>`; an empty `<div>` collapses, and a `<p>` adds an extra blank line to `innerText`).
+- Output text is checked through `innerText` of the entry output, so each output line must be its own block row and a blank line must render as one empty line: a row holding a non-breaking space (`<div>&nbsp;</div>`). An empty `<div>` collapses, and both `<div><br></div>` and a `<p>` add an extra blank line to `innerText`.
 - `ThemesOutput` renders the heading line with `data-testid="themes-usage-heading"` (it has no role of its own; a real heading element would add `##` text to the a11y outline, so it is a `<p>`).
 - `.storybook/preview.tsx` resets the theme before each story (`beforeEach`), so stories don't leak the theme into each other through `localStorage` or `data-theme`.
 
@@ -194,7 +197,7 @@ export const THEME_PROVIDER_PROPS = {
 2. `globals.css` palettes and link color; `providers.tsx`, `layout.tsx`, Storybook preview decorator.
 3. `CommandEffects` and `Terminal` effects; `ThemesOutput`; registry entry (TC 7–12).
 4. Color classes on prompt, marker, cursor, hints (TC 13). `ThemeColorMeta` (TC 14). a11y per theme (TC 15).
-5. `themeColorScript` in the layout head; first-paint test (TC 16).
+5. `themeHeadScript` in the layout head; first-paint test (TC 16).
 6. Browser check (CLAUDE.md): all four themes at 375px and 1280px; reload keeps the theme with no dark flash.
 
 ## Test cases

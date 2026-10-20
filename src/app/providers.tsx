@@ -1,8 +1,21 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { ThemeProvider } from "next-themes";
+import { useState, type ReactNode } from "react";
 
-// Stub (themes spec, Phase A): the ThemeProvider and ThemeColorMeta come during implementation.
+import { dropUnknownStoredTheme } from "@/themes/storedTheme";
+import { ThemeColorMeta } from "@/themes/ThemeColorMeta";
+import { THEME_PROVIDER_PROPS } from "@/themes/themes";
+
 export function Providers({ children }: { children: ReactNode }) {
-  return children;
+  // Runs once, before ThemeProvider reads storage on its first render.
+  useState(() => {
+    if (typeof window !== "undefined") dropUnknownStoredTheme();
+  });
+  return (
+    <ThemeProvider {...THEME_PROVIDER_PROPS}>
+      <ThemeColorMeta />
+      {children}
+    </ThemeProvider>
+  );
 }

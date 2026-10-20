@@ -1,17 +1,5 @@
 @import "tailwindcss";
 
-/* Semantic color tokens (PRD Style → Theme colors), dark theme.
-   The themes feature redefines them per [data-theme="..."]. */
-:root {
-  --bg: #091321;
-  --bg-alt: #101e30;
-  --fg: #d3e9e6;
-  --primary: #8fffe0;
-  --accent: #54dcc0;
-  --muted: #91ada9;
-  --border-subtle: #244353;
-}
-
 @custom-variant narrow (@media (width < 768px));
 
 @theme {
@@ -35,6 +23,50 @@
   --font-mono: var(--font-jetbrains-mono);
 }
 
+/* Semantic color tokens (PRD Style → Theme colors). next-themes sets data-theme on <html>;
+   :root holds dark too, so the page is dark before any script runs. Values must match
+   PALETTES in src/themes/themes.ts (TC-THEMES-4). */
+:root,
+[data-theme="dark"] {
+  --bg: #091321;
+  --bg-alt: #101e30;
+  --fg: #d3e9e6;
+  --primary: #8fffe0;
+  --accent: #54dcc0;
+  --muted: #91ada9;
+  --border-subtle: #244353;
+}
+
+[data-theme="light"] {
+  --bg: #fdf6e3;
+  --bg-alt: #eee8d5;
+  --fg: #586e75;
+  --primary: #2074af;
+  --accent: #207b74;
+  --muted: #5e737a;
+  --border-subtle: #d6ceba;
+}
+
+[data-theme="matrix"] {
+  --bg: #050b06;
+  --bg-alt: #0c1a0f;
+  --fg: #b6f5c5;
+  --primary: #00ff41;
+  --accent: #39d65a;
+  --muted: #75a982;
+  --border-subtle: #244b30;
+}
+
+[data-theme="ubuntu"] {
+  --bg: #300a24;
+  --bg-alt: #40142f;
+  --fg: #f2edeb;
+  --primary: #8ae234;
+  --accent: #e95420;
+  --muted: #b9a9b4;
+  --border-subtle: #69465e;
+}
+
 /* The page is the terminal: bg edge to edge (also under short content and on overscroll),
    and the document itself scrolls. Kept here, not in layout.tsx, so stories get it too. */
 html {
@@ -50,4 +82,9 @@ body {
   font-family: var(--font-mono);
   font-size: 16px;
   line-height: 1.5;
+}
+
+/* Links inside outputs (PRD token table). */
+a {
+  color: var(--accent);
 }

@@ -63,9 +63,9 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 | ------------------- | ---- | -------------- | ---- |
 | terminal-shell      | [x]  | [x]            | [x]  |
 | layout              | [x]  | [x]            | [x]  |
-| themes              | [x]  | [ ]            | [ ]  |
-| cmd-welcome         | [x]  | [ ]            | [ ]  |
-| cmd-help            | [x]  | [ ]            | [ ]  |
+| themes              | [x]  | [x]            | [x]  |
+| cmd-welcome         | [x]  | [x]            | [x]  |
+| cmd-help            | [x]  | [x]            | [ ]  |
 | cmd-about           | [ ]  | [ ]            | [ ]  |
 | cmd-education       | [ ]  | [ ]            | [ ]  |
 | cmd-projects        | [ ]  | [ ]            | [ ]  |

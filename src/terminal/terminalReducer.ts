@@ -68,10 +68,6 @@ export function terminalReducer(
         historyIndex: index < state.history.length ? index : null,
       };
     }
-    case "resetNavigation":
-      return state.historyIndex === null
-        ? state
-        : { ...state, historyIndex: null };
   }
 }
 

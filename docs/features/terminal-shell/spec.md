@@ -183,7 +183,7 @@ type TerminalState = {
 
 - `resolve(raw, registry): Resolution`. It is pure and has no React.
 - `complete(input, names): { value: string; hints: string[] }`. It is pure.
-- Reducer actions: `submit(raw, registry)`, `clearScreen`, `historyUp`, `historyDown`, `resetNavigation`. The reducer returns the input value to show after ↑/↓. `historyUp` and `historyDown` return `{ state, value }` through a small helper, or the value is derived from `historyIndex` in the component.
+- Reducer actions: `submit(raw, registry)`, `clearScreen`, `historyUp`, `historyDown`. (`resetNavigation`, dispatched on typing, was removed on 2026-10-20: typing no longer ends navigation.) The reducer returns the input value to show after ↑/↓. `historyUp` and `historyDown` return `{ state, value }` through a small helper, or the value is derived from `historyIndex` in the component.
 - The `clear` command uses `clearsScreen: true`. The reducer empties the entries and still records `clear` in history (CMD-CLEAR). The `cmd-clear` spec owns any output details beyond this.
 - `Terminal` props: `commands?: CommandDef[]` (default: the registry) and `initialInput?: string` (default `"welcome"`). Stories pass a fake registry so that the shell tests don't depend on what the real commands print.
 - Side effects: `Terminal`'s submit handler calls `resolve`. If it gets `command` and the def has `onSubmit`, it calls `onSubmit` once, then dispatches `submit`. Components never call `onSubmit`.

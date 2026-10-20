@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import {
   useEffect,
   useLayoutEffect,
@@ -22,14 +23,16 @@ import type { CommandDef, CommandEffects } from "./types";
 export type TerminalProps = {
   commands?: readonly CommandDef[];
   initialInput?: string;
-  // Stub (themes spec, Phase A): not wired yet. Defaults to next-themes' setTheme.
+  // Side effects for commands' onSubmit. Defaults to next-themes' setTheme; stories pass spies.
   effects?: CommandEffects;
 };
 
 export function Terminal({
   commands = defaultCommands,
   initialInput = "welcome",
+  effects,
 }: TerminalProps) {
+  const { setTheme } = useTheme();
   const [state, dispatch] = useReducer(terminalReducer, undefined, () =>
     initialState(commands, initialInput),
   );
@@ -96,8 +99,7 @@ export function Terminal({
       const def = commands.find((c) => c.name === resolution.name);
       def?.onSubmit?.(
         { args: resolution.args, history: [...state.history, raw] },
-        // Stub (themes spec, Phase A): replaced by the `effects` prop / next-themes.
-        { setTheme: () => {} },
+        effects ?? { setTheme },
       );
     }
     dispatch({ type: "submit", raw, commands });
@@ -185,7 +187,7 @@ export function Terminal({
               onChange={(e) => {
                 setValue(e.target.value);
                 setHints([]);
-                dispatch({ type: "resetNavigation" });
+                // Editing a recalled entry keeps the ↑/↓ position (like the reference).
                 syncCaret();
               }}
               onKeyDown={handleKeyDown}
@@ -202,7 +204,7 @@ export function Terminal({
         {hints.length > 0 && (
           <div
             data-testid="terminal-hints"
-            className="flex flex-wrap gap-x-[2ch]"
+            className="flex flex-wrap gap-x-[2ch] text-muted"
           >
             {hints.map((hint) => (
               <span key={hint}>{hint}</span>

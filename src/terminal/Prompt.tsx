@@ -11,14 +11,14 @@ export function PromptRow({ children, "data-testid": testId }: Props) {
     <div data-testid={testId} className="flex flex-wrap">
       <span
         data-testid="prompt"
-        className="mr-[1ch] shrink-0 narrow:mr-0 narrow:basis-full"
+        className="mr-[1ch] shrink-0 text-primary narrow:mr-0 narrow:basis-full"
       >
         {PROMPT}
       </span>
       <span
         data-testid="narrow-marker"
         aria-hidden="true"
-        className="mr-[1ch] hidden narrow:inline"
+        className="mr-[1ch] hidden text-primary narrow:inline"
       >
         &gt;
       </span>

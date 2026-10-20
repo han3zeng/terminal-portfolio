@@ -54,5 +54,4 @@ export type TerminalAction =
     }
   | { type: "clearScreen" }
   | { type: "historyUp" }
-  | { type: "historyDown" }
-  | { type: "resetNavigation" };
+  | { type: "historyDown" };

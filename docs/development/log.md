@@ -57,3 +57,10 @@ Ideas to collect as you go, so the post writes itself:
 - **Build the harness from evidence.** Step 5's skill rules came straight from the Step 4 notes, not from guessing up front.
 - **Tests as the contract with the agent.** Approved tests are frozen; the agent may only change code.
 - **Where the agent struggled:** test-environment quirks, browser-only layout bugs.
+
+
+## My Note
+- The whole process, human should just review the testing
+- For rapid development spec becomes an memory record for confirmation if we found something unexpected in component or vitest.
+- If we only have limited time, it is hard to review such detail spec, or we need to specify how spec should be written.
+  - The specs generate by skill are just too granular

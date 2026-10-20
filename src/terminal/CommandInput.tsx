@@ -61,8 +61,8 @@ export function CommandInput({
             data-state={focused ? "solid" : "hollow"}
             className={
               focused
-                ? "absolute top-0 left-0 animate-blink motion-reduce:animate-none"
-                : "absolute top-0 left-0 text-transparent outline outline-1 -outline-offset-1 outline-fg"
+                ? "absolute top-0 left-0 text-primary animate-blink motion-reduce:animate-none"
+                : "absolute top-0 left-0 text-transparent outline outline-1 -outline-offset-1 outline-primary"
             }
           >
             █

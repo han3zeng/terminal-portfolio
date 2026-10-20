@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 
 export const SITE_URL = "https://han3zeng.github.io/terminal-portfolio/";
 // Same as `basePath` in next.config.ts. Metadata icon URLs don't get it added automatically.
@@ -53,5 +53,4 @@ export const metadata: Metadata = {
   },
 };
 
-// Dark theme `bg`.
-export const viewport: Viewport = { themeColor: "#091321" };
+// <meta name="theme-color"> is rendered in layout.tsx (it follows the saved theme).

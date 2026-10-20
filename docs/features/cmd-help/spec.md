@@ -91,7 +91,7 @@ src/terminal/commands.ts   help: { Output: Help }
 ```
 <div data-testid="help" class="whitespace-pre-wrap">
   <div>These are all available commands in this terminal.</div>
-  <div><br></div>                                     — one empty line
+  <div>&nbsp;</div>                                   — one empty line
   <div data-testid="help-heading" class="text-primary">About me</div>
   <ul class="list-none"><li>- about: want to know more about me?</li>…</ul>
   …
@@ -102,7 +102,7 @@ src/terminal/commands.ts   help: { Output: Help }
 
 `help` (the output root), `help-heading` (each of the three headings).
 
-TC-3 compares the output's `innerText` with the PRD block, so each line is its own block row and a blank line renders as one empty line (e.g. `<div><br></div>`). Use `<div>` rather than `<p>` for the intro and headings: a `<p>` adds an extra blank line to `innerText`, and an empty `<div>` collapses to nothing.
+TC-3 compares the output's `innerText` with the PRD block, so each line is its own block row and a blank line renders as one empty line: a row holding a non-breaking space (`<div>&nbsp;</div>`; `<div><br></div>` counts as two lines). Use `<div>` rather than `<p>` for the intro and headings: a `<p>` adds an extra blank line to `innerText`, and an empty `<div>` collapses to nothing.
 
 ### Dependencies
 
