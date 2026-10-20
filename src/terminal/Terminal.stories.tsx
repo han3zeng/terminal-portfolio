@@ -413,8 +413,19 @@ export const TC29: Story = {
     await userEvent.click(document.body);
     await waitFor(() => expect(input).toHaveFocus());
 
+    // Following a link closes the Vitest browser page, so record whether the
+    // terminal prevented the click, then cancel the navigation ourselves.
+    // Added after the terminal's document listener, so it runs last.
+    let preventedByTerminal: boolean | undefined;
+    const record = (e: MouseEvent) => {
+      preventedByTerminal = e.defaultPrevented;
+      e.preventDefault();
+    };
+    document.addEventListener("click", record);
     const link = canvas.getByRole("link", { name: "a link" });
-    await expect(fireEvent.click(link)).toBe(true);
+    fireEvent.click(link);
+    document.removeEventListener("click", record);
+    await expect(preventedByTerminal).toBe(false);
   },
 };
 

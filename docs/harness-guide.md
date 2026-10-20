@@ -26,8 +26,8 @@ Which piece of the Claude Code harness to set up, and when. Rule of thumb: add a
 Do this early: base-path bugs are easier to find in an empty site.
 
 - [x] GitHub Actions workflow that builds and deploys to Pages on push to `main` — `.github/workflows/deploy.yml`
-- [ ] Repo Settings → Pages → Source: GitHub Actions
-- [ ] Open https://han3zeng.github.io/terminal-portfolio/ and check CSS and fonts load
+- [x] Repo Settings → Pages → Source: GitHub Actions
+- [x] Open https://han3zeng.github.io/terminal-portfolio/ and check CSS and fonts load
 
 ### Step 3 — First spec
 
@@ -40,7 +40,7 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 
 - [x] Tests written and failing for the right reason
 - [x] You reviewed and committed the tests
-- [ ] Implementation passes; lint and typecheck pass
+- [x] Implementation passes; lint and typecheck pass
 - [x] Write down where the agent struggled (see "Notes" below). That decides what Step 5 should contain.
 
 ### Step 5 — Automate the loop (after the first feature)
@@ -60,7 +60,7 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 
 | Feature             | Spec | Tests approved | Done |
 | ------------------- | ---- | -------------- | ---- |
-| terminal-shell      | [ ]  | [ ]            | [ ]  |
+| terminal-shell      | [x]  | [x]            | [x]  |
 | layout              | [ ]  | [ ]            | [ ]  |
 | themes              | [ ]  | [ ]            | [ ]  |
 | cmd-welcome         | [ ]  | [ ]            | [ ]  |

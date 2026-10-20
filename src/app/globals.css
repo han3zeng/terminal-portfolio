@@ -5,6 +5,18 @@
   --foreground: #171717;
 }
 
+@custom-variant narrow (@media (width <= 768px));
+
+@theme {
+  --animate-blink: blink 1s step-end infinite;
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

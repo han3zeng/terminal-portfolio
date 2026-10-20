@@ -190,7 +190,7 @@ type TerminalState = {
 
 - The `<input>` keeps focus, keyboard, IME and a11y. It is visually transparent (`color: transparent; caret-color: transparent`), and it sits on top of a mirror `<span>` with `white-space: pre` that renders `value.slice(0, caret)`, then `█` (or a hollow block when blurred), then `value.slice(caret)`.
 - The caret position is tracked from `selectionStart` on `input`, `select`, `keyup` and `click`, and after the Ctrl+A, Ctrl+K and ↑/↓ handlers set it with `setSelectionRange`.
-- For a single line that is longer than its box (≤768px), the mirror is translated by `-input.scrollLeft`, so the drawn cursor stays in line with the input's own scrolling.
+- For a single line that is longer than its box (≤768px), `CommandInput` keeps its own horizontal offset: after each change of value or caret it measures the cursor and shifts the mirror just enough to keep the cursor visible, then sets `input.scrollLeft` to the same offset so clicks land on the right character. The browser's own `input.scrollLeft` is not used as the source, because it doesn't update when the value is set from code.
 
 ### Responsive
 
