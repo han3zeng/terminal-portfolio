@@ -2,7 +2,7 @@
 
 PRD: UI-LAYOUT-2, UI-LAYOUT-3, UI-PROMPT-1, INPUT-1 – INPUT-8, CMD-NOT-FOUND, NFR-A11Y-1, NFR-A11Y-2, NFR-MOBILE-1 (shell part). Also provides the mechanism (not the output) used by CMD-CLEAR and CMD-HISTORY.
 
-Reference studied: `satnaing/terminal-portfolio` @ `a98cfab`, mainly `src/components/Terminal.tsx` (cited below as `T:<line>`), `src/components/Output.tsx` (`O:<line>`), `src/utils/funcs.ts` (`F:<line>`). The Playwright MCP was not set up (harness Step 6), so behavior that is only visible in the browser is marked Unknown.
+Reference studied: this spec was written before the rule to study the reference only through the live site. Its "Reference vs PRD" evidence cites the reference's source code (`satnaing/terminal-portfolio` @ `a98cfab`: `T:` = `Terminal.tsx`, `O:` = `Output.tsx`, `F:` = `funcs.ts`). TODO: re-verify each row in the browser once the Playwright MCP works (harness Step 6) and replace the source citations with observations. The behavior decisions below are Han's and don't depend on that evidence.
 
 ## Scope
 

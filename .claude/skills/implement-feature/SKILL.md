@@ -38,4 +38,5 @@ Start only after Han says the tests are approved and committed. Record the commi
    - `git diff --stat <approved-commit> -- '*.test.ts' '*.test.tsx' '*.stories.tsx'` shows only changes Han approved. If anything else changed, revert it or ask.
    - No `Debug.stories.tsx` or other probe files left.
    - If the implementation differs from the spec's Plan, update the Plan.
+   - If the feature changes the UI: look at it in the browser ("Visual verification" in CLAUDE.md) at 375px and desktop width, and fix anything that looks wrong. Mention what you checked in the report.
 6. **Report** to Han: files changed, the final `spec:status` summary, what was hard (for the "Notes" section of `docs/harness-guide.md` and `docs/development/log.md`), and anything not covered by tests (e.g. needs a visual check). Update the feature tracker in `docs/harness-guide.md`. Do not commit; Han commits.

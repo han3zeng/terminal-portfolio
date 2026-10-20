@@ -10,6 +10,17 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|WebFetch|WebSearch|mcp__playwright__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c \".tool_input\" | grep -qiE \"satnaing/terminal-portfolio\" && { echo \"Blocked: do not read the reference repo (satnaing/terminal-portfolio). Study the live site https://terminal.satnaing.dev/ instead: use it and inspect the page (see CLAUDE.md).\" >&2; exit 2; }; exit 0"
+          }
+        ]
+      }
     ]
   }
 }

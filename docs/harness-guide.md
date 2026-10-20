@@ -50,7 +50,8 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 
 ### Step 6 — Visual verification (before `layout` and `themes`)
 
-- [ ] Playwright MCP in `.mcp.json`. Claude can open the dev server, take screenshots, and check the four themes and the 375px layout. The `product-exploration` skill also uses it to see the rendered reference site.
+- [ ] Playwright MCP in `.mcp.json`. Claude can open the dev server, take screenshots, and check the four themes and the 375px layout. The `product-exploration` skill uses it as the only way to study the reference site: the live page, not its GitHub repo.
+- [ ] Re-verify the "Reference vs PRD" table in `docs/features/terminal-shell/spec.md` in the browser, replacing its source-code citations with observations.
 
 ### Step 7 — Reduce permission prompts (after a few sessions)
 

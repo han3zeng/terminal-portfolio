@@ -4,7 +4,7 @@
 
 Product requirements for my portfolio website, a terminal-style single page.
 
-- Reference product: https://terminal.satnaing.dev/ (source: https://github.com/satnaing/terminal-portfolio)
+- Reference product: https://terminal.satnaing.dev/. Study it only through the live site: using it and inspecting what the page delivers (DOM, CSS, shipped JS). Its GitHub repository is intentionally not used.
 - **This PRD has higher priority than the reference product.** Where they differ, follow this document.
 - Architecture and dev conventions live in `CLAUDE.md`, not here.
 - Items marked `TODO(Han)` are open decisions. Agents must not resolve them on their own; ask Han.

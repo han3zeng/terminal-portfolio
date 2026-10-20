@@ -25,10 +25,21 @@ If the PRD is ambiguous or silent on something this feature needs, ask Han befor
 
 Reference product: https://terminal.satnaing.dev/
 
-The site is client-rendered, so WebFetch returns only the page title. Use:
+Explore it **through the live site only**: use it as a visitor would, and inspect what the running page delivers, as a developer would in devtools.
 
-- Source code: clone https://github.com/satnaing/terminal-portfolio into a temp directory and read `src/`.
-- Rendered behavior: use the Playwright MCP browser tools if available. Otherwise mark rendered-only behavior as Unknown.
+- **Allowed:** the rendered DOM and HTML, CSS and computed styles, the shipped (bundled) JavaScript, network requests, and the accessibility tree, e.g. through `browser_snapshot` and `browser_evaluate`.
+- **Not allowed:** its GitHub repository (cloning, browsing, or reading files from it), and original source files rebuilt from source maps. Both are the authors' source, not the product.
+
+The goal is to specify behavior from what the product does and delivers.
+
+Use the Playwright MCP browser tools (see "Visual verification" in CLAUDE.md). The site is client-rendered, so WebFetch returns only the page title.
+
+- Open https://terminal.satnaing.dev/ and take screenshots at 375px and at desktop width (e.g. 1280px).
+- Try the interactions: type commands, valid and invalid arguments, empty input, each keyboard shortcut, Tab with one and several matches, ↑/↓, resizing, clicking around.
+- Use `browser_snapshot` (the accessibility tree) to check labels, roles and live regions.
+- Probe edge cases deliberately: case changes, extra spaces, very long input, repeated commands.
+
+If the browser tools are not available, stop and tell Han to enable the Playwright MCP. Do not fall back to the GitHub repository.
 
 Inspect what is relevant to this feature:
 
@@ -37,8 +48,8 @@ Inspect what is relevant to this feature:
 - Responsive behavior
 - Accessibility behavior
 
-The reference uses Vite, styled-components, and lodash. Study its behavior, not its architecture.
-Record evidence (file path + line, or what was observed in the browser) for each behavior.
+Record evidence for each behavior as an observation: what you did, at which viewport, and what happened (e.g. "1280px: typed `hel`, pressed Tab → input became `help`"), or what you found by inspecting the page (e.g. "input has `aria-label`? no: no label in the accessibility tree"). Save key screenshots under `docs/features/<feature-slug>/reference/` and cite them by file name.
+Behavior that cannot be observed from the outside (e.g. timing, what happens on reload) is marked Unknown unless you can test it in the browser.
 
 ## Phase 3: Gap analysis
 

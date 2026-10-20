@@ -53,7 +53,17 @@ Package manager: pnpm (never npm or yarn).
 - Static export: no API routes, server actions, middleware, or runtime `next/image` optimization. `next start` does not work; preview with any static server on `out/`.
 - ESLint 9 uses flat config (`eslint.config.mjs`). `eslint-config-prettier` must stay the last entry.
 - Storybook builds with Vite, not Turbopack: Tailwind is added through `@tailwindcss/vite` in `.storybook/main.ts`, and `next/font` CSS variables set in `layout.tsx` do not exist in stories unless added in `.storybook/preview.tsx`.
-- The reference site uses Vite, styled-components, and lodash. Copy its behavior, not its code or dependencies.
+- Learn the reference site only from the live page: use it, and inspect what it delivers (DOM, CSS, shipped JS, network). Never read its GitHub repository or source-map sources, and never copy its code or dependencies.
+
+## Visual verification
+
+The Playwright MCP (`.mcp.json`) gives Claude a headless browser for looking at the real page. Tests check behavior; use the browser for what they can't judge: how it looks.
+
+- Start the dev server in the background (`pnpm dev`), then open http://localhost:3000/terminal-portfolio/ (the base path is required).
+- Check at 375px and at a desktop width (e.g. 1280px) with `browser_resize`. Once `themes` exists, check all four themes.
+- Take screenshots with `browser_take_screenshot`; use `browser_snapshot` (the accessibility tree) to find elements.
+- Use it after UI changes, before saying a UI feature is done, and to inspect the reference site (https://terminal.satnaing.dev/).
+- Stop the dev server when finished.
 
 ## Workflow: TDD
 
