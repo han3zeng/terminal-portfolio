@@ -22,5 +22,24 @@
         ]
       }
     ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(pnpm -s lint)",
+      "Bash(pnpm -s spec:status *)",
+      "Bash(pnpm -s test)",
+      "Bash(pnpm -s typecheck)",
+      "Bash(pnpm exec prettier --check *)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm spec:status *)",
+      "Bash(pnpm spec:status)",
+      "Bash(pnpm test)",
+      "Bash(pnpm typecheck)",
+      "mcp__playwright__browser_close",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_take_screenshot"
+    ]
   }
 }

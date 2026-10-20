@@ -72,6 +72,12 @@ export function Terminal({
     inputLineRef.current?.scrollIntoView({ block: "nearest" });
   }, [state.entries]);
 
+  // `autoFocus` in the static HTML focuses the input before hydration, and React
+  // never sees that focus event, so read the focus state once after mount.
+  useEffect(() => {
+    if (document.activeElement === inputRef.current) setFocused(true);
+  }, []);
+
   // A click anywhere focuses the input (INPUT-5); links still follow their href.
   useEffect(() => {
     const focusInput = () => inputRef.current?.focus();

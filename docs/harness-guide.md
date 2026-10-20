@@ -53,9 +53,9 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 - [x] Playwright MCP in `.mcp.json`. Claude can open the dev server, take screenshots, and check the four themes and the 375px layout. The `product-exploration` skill uses it as the only way to study the reference site: the live page, not its GitHub repo.
 - [x] Re-verify the "Reference vs PRD" table in `docs/features/terminal-shell/spec.md` in the browser, replacing its source-code citations with observations.
 
-### Step 7 — Reduce permission prompts (after a few sessions)
+### Step 7 — Reduce permission prompts (after a few sessions) ✅
 
-- [ ] Run `/fewer-permission-prompts`
+- [x] Run `/fewer-permission-prompts`: 15 read-only rules in `.claude/settings.json` (`pnpm lint`/`typecheck`/`test`/`spec:status`, `prettier --check`, the Playwright navigate/resize/screenshot/snapshot/close tools). Re-run after more sessions.
 
 ## Feature tracker
 
@@ -63,9 +63,9 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 | ------------------- | ---- | -------------- | ---- |
 | terminal-shell      | [x]  | [x]            | [x]  |
 | layout              | [x]  | [x]            | [x]  |
-| themes              | [ ]  | [ ]            | [ ]  |
-| cmd-welcome         | [ ]  | [ ]            | [ ]  |
-| cmd-help            | [ ]  | [ ]            | [ ]  |
+| themes              | [x]  | [ ]            | [ ]  |
+| cmd-welcome         | [x]  | [ ]            | [ ]  |
+| cmd-help            | [x]  | [ ]            | [ ]  |
 | cmd-about           | [ ]  | [ ]            | [ ]  |
 | cmd-education       | [ ]  | [ ]            | [ ]  |
 | cmd-projects        | [ ]  | [ ]            | [ ]  |

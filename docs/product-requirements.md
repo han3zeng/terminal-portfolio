@@ -116,6 +116,8 @@ The address is printed so visitors without a mail client can still copy it.
 
 ### help — CMD-HELP
 
+The section headings (`About me`, `Utilities`, `Typical terminal commands`) are in `primary`; every other line is `fg`.
+
 **Print**
 
 ```
@@ -205,7 +207,8 @@ I am looking forward to hearing from you.
 
 - `themes` lists all available themes and the usage below.
 - `themes set <theme_name>` switches the page theme immediately and prints nothing.
-- `themes set <unknown>` or any other argument prints the usage below.
+- `themes set <unknown>` or any other argument prints only the `## How to use` block (its three lines), not the theme list.
+- Theme names are case-sensitive: `themes set Ubuntu` prints the usage block.
 - The default theme on first visit is `dark`. The OS light/dark setting is ignored.
 - The chosen theme persists across page reloads.
 
@@ -224,11 +227,12 @@ e.g. themes set matrix
 **Layout**
 
 - Responsive breakpoint at 768px:
-  - Desktop: viewport width > 768px
-  - Tablet and mobile: viewport width ≤ 768px
-- Desktop: a flex row with two children. The description is on the left and the graphic on the right. The graphic is scaled so that it is the same height as the description section.
+  - Desktop: viewport width ≥ 768px
+  - Tablet and mobile: viewport width < 768px (the same breakpoint as the two-line prompt in UI-PROMPT-1)
+- Desktop: a flex row with two children. The description is on the left and the graphic on the right. The graphic is scaled so that it is the same height as the description section. The scale is uniform (the same factor for width and height), so the graphic's shape never changes.
 - Tablet and mobile: the graphic is hidden, and the description shows the narrow banner instead of the wide one.
 - The ASCII art must never overflow the viewport horizontally.
+- The banner (wide or narrow) is in `primary`; everything else is `fg`. Screen readers announce the banner as "Han Zeng"; the graphic is decorative and hidden from them.
 
 **Description section prints** (desktop: wide banner)
 
@@ -342,10 +346,27 @@ Four themes: dark, light, matrix, ubuntu. Each defines the same semantic tokens.
 | `bg`            | #091321 | #FDF6E3                 | #050B06                | #300A24                   |
 | `bg-alt`        | #101E30 | #EEE8D5                 | #0C1A0F                | #40142F                   |
 | `fg`            | #D3E9E6 | #586E75                 | #B6F5C5                | #F2EDEB                   |
-| `primary`       | #8FFFE0 | #268BD2                 | #00FF41                | #8AE234                   |
-| `accent`        | #54DCC0 | #2AA198                 | #39D65A                | #E95420                   |
-| `muted`         | #91ADA9 | #657B83                 | #75A982                | #B9A9B4                   |
+| `primary`       | #8FFFE0 | #2074AF                 | #00FF41                | #8AE234                   |
+| `accent`        | #54DCC0 | #207B74                 | #39D65A                | #E95420                   |
+| `muted`         | #91ADA9 | #5E737A                 | #75A982                | #B9A9B4                   |
 | `border-subtle` | #244353 | #D6CEBA                 | #244B30                | #69465E                   |
+
+The light theme's `primary`, `accent` and `muted` are the Solarized hues darkened just enough to meet NFR-A11Y-3 (the original Solarized values `#268BD2`, `#2AA198`, `#657B83` are below 4.5:1 on `#FDF6E3`).
+
+Which part of the terminal uses which token:
+
+| Part                                                   | Token                    |
+| ------------------------------------------------------ | ------------------------ |
+| Page background                                        | `bg`                     |
+| Prompt `visitor@han3zeng:~$` and the narrow `>` marker | `primary`                |
+| Block cursor (solid and hollow)                        | `primary`                |
+| Past command text and command output                   | `fg`                     |
+| Tab hints                                              | `muted`                  |
+| Headings inside outputs (e.g. `## How to use`)         | `primary`                |
+| Links inside outputs                                   | `accent`                 |
+| Browser `theme-color` meta                             | the current theme's `bg` |
+
+Switching themes is instant (no color transition). On load, the saved theme is applied before the first paint, with no flash of another theme.
 
 ### Design guide
 
@@ -359,7 +380,6 @@ Four themes: dark, light, matrix, ubuntu. Each defines the same semantic tokens.
 
 - https://terminal.satnaing.dev/
 - https://www.vice.com/en/article/how-the-matrix-inspired-a-new-generation-of-hackers/
-- `docs/assets/screen-sample.png`
 
 ## Non-functional requirements
 
