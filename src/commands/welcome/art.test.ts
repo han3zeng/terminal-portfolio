@@ -3,17 +3,11 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import {
-  GRAPHIC,
-  GRAPHIC_COLS,
-  GRAPHIC_ROWS,
-  NARROW_BANNER,
-  TEXT_LINES,
-  WIDE_BANNER,
-} from "./art";
+import { NARROW_BANNER, TEXT_LINES, WIDE_BANNER } from "./art";
 
 // The code blocks under `### welcome — CMD-WELCOME` in the PRD:
-// [0] description (wide banner, two blank lines, two text lines), [1] narrow banner, [2] graphic.
+// [0] description (wide banner, two blank lines, two text lines), [1] narrow banner,
+// [2] the graphic (out of scope: Han implements it by hand).
 function prdWelcomeBlocks(): string[] {
   const prd = readFileSync(
     path.resolve(import.meta.dirname, "../../../docs/product-requirements.md"),
@@ -30,25 +24,19 @@ function prdWelcomeBlocks(): string[] {
 const lines = (s: string) => s.split("\n");
 
 describe("welcome art", () => {
-  it("TC-CMD-WELCOME-1: the banners, graphic and text lines equal the PRD's blocks", () => {
-    const blocks = prdWelcomeBlocks();
-    expect(blocks).toHaveLength(3);
-    const [description, narrow, graphic] = blocks.map(lines);
+  it("TC-CMD-WELCOME-1: the banners and text lines equal the PRD's blocks", () => {
+    const [description, narrow] = prdWelcomeBlocks().map(lines);
 
     expect(lines(WIDE_BANNER)).toEqual(description.slice(0, 5));
     expect(description.slice(5, 7)).toEqual(["", ""]);
     expect([...TEXT_LINES]).toEqual(description.slice(7));
     expect(lines(NARROW_BANNER)).toEqual(narrow);
-    expect(lines(GRAPHIC)).toEqual(graphic);
   });
 
-  it("TC-CMD-WELCOME-2: the graphic is 40×38, the narrow banner 25 wide, and no art line has trailing spaces", () => {
+  it("TC-CMD-WELCOME-2: the narrow banner is 25 wide, and no banner line has trailing spaces", () => {
     const widest = (s: string) => Math.max(...lines(s).map((l) => l.length));
-    expect(lines(GRAPHIC)).toHaveLength(40);
-    expect(widest(GRAPHIC)).toBe(38);
-    expect([GRAPHIC_ROWS, GRAPHIC_COLS]).toEqual([40, 38]);
     expect(widest(NARROW_BANNER)).toBe(25);
-    for (const art of [WIDE_BANNER, NARROW_BANNER, GRAPHIC]) {
+    for (const art of [WIDE_BANNER, NARROW_BANNER]) {
       expect(lines(art).filter((l) => l !== l.trimEnd())).toEqual([]);
     }
   });
