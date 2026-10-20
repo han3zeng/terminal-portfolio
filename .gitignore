@@ -45,3 +45,10 @@ storybook-static
 
 # Playwright MCP output (screenshots, snapshots, console logs)
 /.playwright-mcp/
+
+# reference screenshots from product-exploration (kept locally, not committed)
+/docs/features/**/*.png
+/docs/features/**/*.jpg
+/docs/features/**/*.jpeg
+/docs/features/**/*.gif
+/docs/features/**/*.webp
