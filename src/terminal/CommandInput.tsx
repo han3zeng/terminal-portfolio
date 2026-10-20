@@ -62,7 +62,7 @@ export function CommandInput({
             className={
               focused
                 ? "absolute top-0 left-0 animate-blink motion-reduce:animate-none"
-                : "absolute top-0 left-0 text-transparent outline outline-1 -outline-offset-1 outline-foreground"
+                : "absolute top-0 left-0 text-transparent outline outline-1 -outline-offset-1 outline-fg"
             }
           >
             █

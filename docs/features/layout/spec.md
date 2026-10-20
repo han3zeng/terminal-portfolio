@@ -131,10 +131,12 @@ src/app/
   layout.tsx             html lang="en" + font variable; body classes; exports `metadata` and `viewport` from ./metadata
   metadata.ts            SITE_URL, TITLE, DESCRIPTION, `metadata: Metadata`, `viewport: Viewport` (themeColor)
   page.tsx               <main> with the sr-only <h1>{TITLE}</h1>, then <Terminal />
-  opengraph-image.tsx    ImageResponse 1200×630, `alt`, `size`, `contentType` exports (also used as twitter image via metadata)
-  icon.tsx               ImageResponse 32×32
-  apple-icon.tsx         ImageResponse 180×180
-  og-font.ts             loads the JetBrains Mono woff from @fontsource/jetbrains-mono (shared by the three image files)
+  og-image.tsx           ogImage(): the 1200×630 ImageResponse
+  icon-image.tsx         iconImage(side): the `>_` ImageResponse, shared by both icons
+  og-font.ts             loads the JetBrains Mono woffs from @fontsource/jetbrains-mono; dark token values for the images
+  og.png/route.tsx                 GET → ogImage(); force-static, exported as out/og.png
+  icon-32.png/route.tsx            GET → iconImage(32); exported as out/icon-32.png
+  apple-touch-icon.png/route.tsx   GET → iconImage(180); exported as out/apple-touch-icon.png
   favicon.ico            deleted
   Page.stories.tsx       Storybook interaction tests for the page shell (renders `Home` from page.tsx)
 src/terminal/CommandInput.tsx   outline-foreground → outline-fg
@@ -169,8 +171,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#091321" };
 ```
 
-- The OG image comes from the `opengraph-image.tsx` file convention. Next adds `og:image`, its width, height and alt automatically. `twitter:image` is the same file: either a `twitter-image.tsx` that re-exports it, or the URL set in `metadata.twitter.images`. The implementer picks one; TC-LAYOUT-2 checks the result.
-- Check in the build output that Next composes `metadataBase` + `basePath` correctly (no doubled or missing `/terminal-portfolio`). If it doesn't, the image URLs are set explicitly in `metadata`.
+- The images are **static route handlers** with `.png` names (`export const dynamic = "force-static"`), linked explicitly from `metadata`: `openGraph.images` and `twitter.images` both get `{ url: "/og.png", width: 1200, height: 630, alt: TITLE, type: "image/png" }` (resolved against `metadataBase`), and `icons.icon` / `icons.apple` get `/terminal-portfolio/icon-32.png` and `/terminal-portfolio/apple-touch-icon.png` with `type` and `sizes`.
+- Why not the `opengraph-image` / `icon` / `apple-icon` file conventions (tried first): with `output: "export"` they need `dynamic = "force-static"` in each file (it can't be re-exported), they are written **without a file extension** (`out/opengraph-image`, so GitHub Pages wouldn't serve them as `image/png`), the generated `<link rel="icon">` hrefs **miss the base path** (`/icon?…`), and a `twitter-image` file gets its own URL instead of reusing `og:image`.
+- `metadataBase` + a root-relative image URL composes correctly: `https://han3zeng.github.io/terminal-portfolio/og.png`. Icon URLs are not composed with `basePath`, so they carry it themselves.
+- The OG image draws the block cursor as a filled box, not the `█` character: `█` (U+2588) isn't in the `latin` subset of the font, so it rendered as a missing-glyph box.
 - Read `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/01-metadata/` (`opengraph-image.md`, `app-icons.md`) before writing these files.
 
 ### Body styles
@@ -205,7 +209,7 @@ Add `html { height: 100% }` and `body { min-height: 100% }` in `globals.css` so 
 1. `scripts/export.test.ts` (TC 1–4) and `src/app/Page.stories.tsx` (TC 5–10). Confirm they fail for the expected reason.
 2. `globals.css` tokens and body styles, `CommandInput` class rename (TC 5, 6, 7).
 3. `page.tsx` `h1`, `metadata.ts`, `layout.tsx` (TC 1, 4, 10).
-4. `og-font.ts`, `opengraph-image.tsx`, `icon.tsx`, `apple-icon.tsx`; delete `favicon.ico` (TC 2, 3).
+4. `og-font.ts`, `og-image.tsx`, `icon-image.tsx` and the three `*.png/route.tsx` handlers; delete `favicon.ico` (TC 2, 3).
 5. Check in the browser (CLAUDE.md "Visual verification"): 375px and 1280px screenshots of the dev server, and open the generated OG image and icons from `out/` to look at them.
 
 ## Test cases

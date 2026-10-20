@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
+/* Semantic color tokens (PRD Style → Theme colors), dark theme.
+   The themes feature redefines them per [data-theme="..."]. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #091321;
+  --bg-alt: #101e30;
+  --fg: #d3e9e6;
+  --primary: #8fffe0;
+  --accent: #54dcc0;
+  --muted: #91ada9;
+  --border-subtle: #244353;
 }
 
 @custom-variant narrow (@media (width < 768px));
@@ -18,20 +25,29 @@
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-bg-alt: var(--bg-alt);
+  --color-fg: var(--fg);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-border-subtle: var(--border-subtle);
   --font-mono: var(--font-jetbrains-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* The page is the terminal: bg edge to edge (also under short content and on overscroll),
+   and the document itself scrolls. Kept here, not in layout.tsx, so stories get it too. */
+html {
+  height: 100%;
+  background: var(--bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1.5;
 }

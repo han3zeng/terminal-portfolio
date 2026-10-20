@@ -62,7 +62,7 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 | Feature             | Spec | Tests approved | Done |
 | ------------------- | ---- | -------------- | ---- |
 | terminal-shell      | [x]  | [x]            | [x]  |
-| layout              | [x]  | [ ]            | [ ]  |
+| layout              | [x]  | [x]            | [x]  |
 | themes              | [ ]  | [ ]            | [ ]  |
 | cmd-welcome         | [ ]  | [ ]            | [ ]  |
 | cmd-help            | [ ]  | [ ]            | [ ]  |
