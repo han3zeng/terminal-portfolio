@@ -17,11 +17,13 @@ import { EntryView } from "./EntryView";
 import { PromptRow } from "./Prompt";
 import { resolve } from "./resolve";
 import { historyValue, initialState, terminalReducer } from "./terminalReducer";
-import type { CommandDef } from "./types";
+import type { CommandDef, CommandEffects } from "./types";
 
 export type TerminalProps = {
   commands?: readonly CommandDef[];
   initialInput?: string;
+  // Stub (themes spec, Phase A): not wired yet. Defaults to next-themes' setTheme.
+  effects?: CommandEffects;
 };
 
 export function Terminal({
@@ -92,10 +94,11 @@ export function Terminal({
     // Side effects fire here, once, never during render (INPUT-6).
     if (resolution.kind === "command") {
       const def = commands.find((c) => c.name === resolution.name);
-      def?.onSubmit?.({
-        args: resolution.args,
-        history: [...state.history, raw],
-      });
+      def?.onSubmit?.(
+        { args: resolution.args, history: [...state.history, raw] },
+        // Stub (themes spec, Phase A): replaced by the `effects` prop / next-themes.
+        { setTheme: () => {} },
+      );
     }
     dispatch({ type: "submit", raw, commands });
     setValueAndCaret("", 0);

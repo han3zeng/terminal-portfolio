@@ -54,7 +54,7 @@ Typical terminal commands
 
 ### Accessibility
 
-- The headings are styled text, not `<h2>` elements: the page's only heading is the layout's hidden `<h1>`, and output from many `help` runs would otherwise flood the heading outline. Each section is a `<p>` for the heading followed by a `<ul>` of its lines, so screen readers announce "list, 8 items". The `- ` prefix is real text (it's part of the PRD's output) and the list has `list-style: none`.
+- The headings are styled text, not `<h2>` elements: the page's only heading is the layout's hidden `<h1>`, and output from many `help` runs would otherwise flood the heading outline. Each section is a `<div>` for the heading followed by a `<ul>` of its lines, so screen readers announce "list, 8 items". The `- ` prefix is real text (it's part of the PRD's output) and the list has `list-style: none`.
 
 ### Reference vs PRD
 
@@ -90,9 +90,9 @@ src/terminal/commands.ts   help: { Output: Help }
 
 ```
 <div data-testid="help" class="whitespace-pre-wrap">
-  <p>These are all available commands in this terminal.</p>
-  <p aria-hidden="true">(blank line)</p>            — or margins of exactly one row; TC-1 checks the text, TC-4 the rows
-  <p data-testid="help-heading" class="text-primary">About me</p>
+  <div>These are all available commands in this terminal.</div>
+  <div><br></div>                                     — one empty line
+  <div data-testid="help-heading" class="text-primary">About me</div>
   <ul class="list-none"><li>- about: want to know more about me?</li>…</ul>
   …
 </div>
@@ -101,6 +101,8 @@ src/terminal/commands.ts   help: { Output: Help }
 ### Test hooks
 
 `help` (the output root), `help-heading` (each of the three headings).
+
+TC-3 compares the output's `innerText` with the PRD block, so each line is its own block row and a blank line renders as one empty line (e.g. `<div><br></div>`). Use `<div>` rather than `<p>` for the intro and headings: a `<p>` adds an extra blank line to `innerText`, and an empty `<div>` collapses to nothing.
 
 ### Dependencies
 

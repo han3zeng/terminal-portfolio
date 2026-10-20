@@ -6,12 +6,15 @@ export type CommandContext = {
   history: readonly string[];
 };
 
+// Side effects a command's onSubmit may perform (passed in by Terminal, so stories can spy on them).
+export type CommandEffects = { setTheme: (theme: string) => void };
+
 export type CommandDef = {
   name: string;
   takesArgs: boolean;
   Output: ComponentType<CommandContext>;
   // Side effect, called once by the submit handler (INPUT-6). Never call it from render.
-  onSubmit?: (ctx: CommandContext) => void;
+  onSubmit?: (ctx: CommandContext, effects: CommandEffects) => void;
   // `clear`: the reducer empties the entries instead of adding one.
   clearsScreen?: boolean;
 };
