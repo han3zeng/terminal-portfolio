@@ -19,7 +19,7 @@ These reference-site features are intentionally **not** included:
 
 ## Main layout and features
 
-- **UI-LAYOUT-1** The whole screen is a terminal window. No desktop background; the page should feel immersive, like using a terminal.
+- **UI-LAYOUT-1** The whole screen is a terminal window. No desktop background; the page should feel immersive, like using a terminal. No visible frame or border. When output is taller than the screen, the whole page scrolls.
 - **UI-LAYOUT-2** On first load, the terminal runs `welcome` automatically. Typing `welcome` later prints the same output again.
 - **UI-LAYOUT-3** The input line stays below the latest output. When new output is added, the terminal scrolls to the bottom.
 - **UI-PROMPT-1** Every input line and every past command line is prefixed with the prompt `visitor@han3zeng:~$`. At viewport width < 768px, the prompt is on its own line and the input (or past command) is on the next line, prefixed with `>`. The input stays a single line and scrolls horizontally inside itself.
@@ -367,6 +367,6 @@ Four themes: dark, light, matrix, ubuntu. Each defines the same semantic tokens.
 - **NFR-A11Y-2** With `prefers-reduced-motion: reduce`, the cursor does not blink.
 - **NFR-A11Y-3** In every theme, `fg`, `primary` and `muted` on `bg` meet WCAG AA contrast (4.5:1).
 - **NFR-MOBILE-1** Tapping the terminal opens the on-screen keyboard. No horizontal page scroll at 375px width.
-- **NFR-SEO-1** The page has a title, meta description, Open Graph image, and favicon.
+- **NFR-SEO-1** The page has a title (`Han Zeng — Terminal Portfolio`), meta description (`Terminal-style portfolio of Han Zeng, front-end engineer.`), Open Graph image, and favicon. The OG image (1200×630) and the icons are generated at build time in the dark theme.
 - **NFR-BUILD-1** The site is fully statically generated (no server runtime).
 - **NFR-BUILD-2** The site is deployed to GitHub Pages at https://han3zeng.github.io/terminal-portfolio/ by a GitHub Actions workflow on push to `main`. Because of that sub-path, the `basePath` is `/terminal-portfolio`, and every asset and file link (including `/resume.pdf`) must include it.

@@ -197,7 +197,7 @@ Add `html { height: 100% }` and `body { min-height: 100% }` in `globals.css` so 
 
 ### Test hooks
 
-- The page story renders `Home` with `parameters.layout: "fullscreen"`, so Storybook adds no padding, and with the same custom viewports as `Terminal.stories.tsx` (375, 1280×400, 1280×800). Reuse that `VIEWPORTS` object by moving it to a shared file, e.g. `.storybook/viewports.ts`.
+- The page story renders `Home` with `parameters.layout: "fullscreen"`, so Storybook adds no padding. It defines its own viewports (320, 375, 1280×400, 1280×800) instead of sharing `Terminal.stories.tsx`'s `VIEWPORTS`: moving that object would change an approved test file.
 - The `h1` uses Tailwind's `sr-only`.
 
 ### Order of work
@@ -232,6 +232,11 @@ These run `pnpm build` once in `beforeAll` (timeout ~3 min), then read files und
 
 ### Test-tooling notes
 
-- TC 1–4 depend on a full `next build`. It writes `out/` and `.next/` and doesn't conflict with a running `next dev` (dev uses `.next/dev`). It makes `pnpm test:unit` about 30–60s slower. If that hurts, a later change can move `scripts/export.test.ts` into its own Vitest project; that is a tooling change, not a spec change.
+- TC 1–4 depend on a full `next build`. It writes `out/` and `.next/` and doesn't conflict with a running `next dev` (dev uses `.next/dev`). The build takes about 7s, so `pnpm test:unit` gets about that much slower. If that hurts, a later change can move `scripts/export.test.ts` into its own Vitest project; that is a tooling change, not a spec change.
+- Vitest sets `NODE_ENV=test`. A `next build` that inherits it fails while prerendering `/_global-error` (`Cannot read properties of null (reading 'useContext')`), so the test runs the build with `NODE_ENV=production`.
+- Browser console output from a story isn't shown in the Vitest run. To see values while debugging, put them in a thrown error or an assertion message.
+- Probe result: Storybook keeps its own hidden UI (`sb-loader`, `sb-previewBlock`, `sb-errordisplay`, …) inside `<body>`, and that UI has rounded corners and borders. The page-wide checks in TC 5, 7 and 8 therefore look at `<html>`, `<body>`, the story root and its descendants only.
+- Probe result: in stories, `Home` renders with the `@/` alias, `document.fonts.check('16px "JetBrains Mono"')` is true (the font really loads), and the document (not an inner element) scrolls at 1280×400.
+- TC 7, 8 and 9 already pass before any layout work: the terminal-shell code has no rounded corners, no inner scroll container, and wraps long lines. They stay as regression guards.
 - TC 5–10 run with `globals.css` through `.storybook/preview.tsx`, which already sets the `next/font` variable on `<html>`. Stories can't see `layout.tsx`'s `<html>`/`<body>` classes, so anything the page depends on (`min-height`, background, font) must live in `globals.css`, not only in `layout.tsx` classes. TC-LAYOUT-5 checks this.
 - TC-LAYOUT-8 and TC-LAYOUT-9 set the viewport with story `globals.viewport` and the custom viewports, like terminal-shell TC-32/33.
