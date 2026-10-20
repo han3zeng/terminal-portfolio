@@ -9,7 +9,7 @@ import { playwright } from "@vitest/browser-playwright";
 const dirname = import.meta.dirname;
 
 // Two test projects:
-// - unit: pure functions, `src/**/*.test.ts(x)`, runs in Node
+// - unit: pure functions and scripts, `src/**/*.test.ts(x)` + `scripts/**/*.test.ts`, runs in Node
 // - storybook: every story (and its `play` function) runs as a test in a real browser
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
@@ -23,7 +23,7 @@ export default defineConfig({
         test: {
           name: "unit",
           environment: "node",
-          include: ["src/**/*.test.{ts,tsx}"],
+          include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.ts"],
         },
       },
       {

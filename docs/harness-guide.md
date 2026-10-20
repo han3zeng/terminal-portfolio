@@ -45,8 +45,8 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 
 ### Step 5 — Automate the loop (after the first feature)
 
-- [ ] `spec:status` script: for each `TC-*` ID in the specs, shows **missing**, **failing** or **passing** (from Vitest's JSON report)
-- [ ] Skill `implement-feature <feature>`: write tests → stop for review → implement until `spec:status` is green, max ~5 rounds without progress → check `git diff` on test files is empty
+- [x] `spec:status` script: for each `TC-*` ID in the specs, shows **missing**, **failing** or **passing** (from Vitest's JSON report)
+- [x] Skill `implement-feature <feature>`: write tests → stop for review → implement until `spec:status` is green, max ~5 rounds without progress → check `git diff` on test files is empty
 
 ### Step 6 — Visual verification (before `layout` and `themes`)
 
@@ -93,4 +93,4 @@ Small commands (`pwd`, `whoami`, `about`, `education`) can share one spec, or sk
 - Write down what went wrong or felt repetitive while working. That is the evidence for the next harness change.
 - The tests relied on test-environment behavior nobody had checked first: following a link closed the browser (TC-29), and the screen-size and reduced-motion workarounds were unverified. Skill idea: run the new tests once early, to tell environment problems apart from real failures.
 - Browser-only bugs (the TC-33 cursor) needed a throwaway debug story to diagnose. Skill idea: allow temporary debug stories, but they must be deleted. Step 6 (Playwright) will help further.
-- I had to stop and ask before changing an approved test. That worked. Skill idea: keep it as a hard rule. Any change to a test file means stop and ask.-
+- I had to stop and ask before changing an approved test. That worked. Skill idea: keep it as a hard rule. Any change to a test file means stop and ask.

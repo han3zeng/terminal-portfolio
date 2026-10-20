@@ -7,6 +7,7 @@ Han's portfolio: a single-page, terminal-style website. This repo is also a prac
 - `docs/product-requirements.md` is the PRD. It overrides the reference site (https://terminal.satnaing.dev/).
 - `docs/features/<feature>/spec.md` is the spec for one feature (spec, plan and test cases), written with the `product-exploration` skill. Implement from it.
 - `docs/harness-guide.md` tracks which harness pieces are set up and when to add the next one.
+- To implement a feature from its spec, use the `implement-feature` skill.
 - If the PRD or a spec is ambiguous, ask Han. Never decide product behavior yourself.
 
 ## Stack
@@ -27,8 +28,9 @@ Package manager: pnpm (never npm or yarn).
 - `pnpm dev`: Next.js dev server
 - `pnpm build`: static export to `out/`
 - `pnpm lint` / `pnpm typecheck` / `pnpm format`
-- `pnpm test`: all tests. `pnpm test:unit` for Vitest unit tests (`src/**/*.test.ts(x)`, Node), `pnpm test:storybook` for stories run as tests in headless Chromium
+- `pnpm test`: all tests. `pnpm test:unit` for Vitest unit tests (`src/**/*.test.ts(x)` and `scripts/**/*.test.ts`, Node), `pnpm test:storybook` for stories run as tests in headless Chromium
 - `pnpm test:unit -t "TC-THEMES-2"`: run one test case by ID
+- `pnpm spec:status [feature]`: for each `TC-*` ID in the specs, shows missing, failing or passing. Exits 0 only when all pass. This, not `pnpm test` alone, is the definition of a feature's tests being done.
 - `pnpm storybook`: Storybook UI on port 6006
 
 ## Next.js docs
@@ -63,4 +65,4 @@ Package manager: pnpm (never npm or yarn).
 
 ## Done means
 
-Lint, typecheck, and all tests pass, and the change covers its spec's test cases.
+Lint, typecheck, and all tests pass, and `pnpm spec:status <feature>` is green (every spec test case has a passing test).
