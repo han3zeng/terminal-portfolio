@@ -56,6 +56,11 @@ const VIEWPORTS = {
     styles: { width: "375px", height: "667px" },
     type: "mobile",
   },
+  w767: {
+    name: "767px",
+    styles: { width: "767px", height: "1024px" },
+    type: "tablet",
+  },
   w768: {
     name: "768px",
     styles: { width: "768px", height: "1024px" },
@@ -472,10 +477,8 @@ export const TC31: Story = {
   },
 };
 
-export const TC32: Story = {
-  name: "TC-TERMINAL-SHELL-32: desktop keeps the prompt and input on one row",
-  globals: { viewport: { value: "w1024", isRotated: false } },
-  play: async ({ canvasElement }) => {
+function widePlay(): Story["play"] {
+  return async ({ canvasElement }) => {
     const { canvas, input } = await setup(canvasElement);
     const line = within(canvas.getByTestId("input-line"));
     await expect(
@@ -487,7 +490,19 @@ export const TC32: Story = {
     for (const marker of canvas.queryAllByTestId("narrow-marker")) {
       await expect(marker).not.toBeVisible();
     }
-  },
+  };
+}
+
+export const TC32At768: Story = {
+  name: "TC-TERMINAL-SHELL-32: wide screens keep the prompt and input on one row (768px)",
+  globals: { viewport: { value: "w768", isRotated: false } },
+  play: widePlay(),
+};
+
+export const TC32At1024: Story = {
+  name: "TC-TERMINAL-SHELL-32: wide screens keep the prompt and input on one row (1024px)",
+  globals: { viewport: { value: "w1024", isRotated: false } },
+  play: widePlay(),
 };
 
 function narrowPlay(): Story["play"] {
@@ -525,8 +540,8 @@ export const TC33At375: Story = {
   play: narrowPlay(),
 };
 
-export const TC33At768: Story = {
-  name: "TC-TERMINAL-SHELL-33: narrow screens put the prompt on its own line (768px)",
-  globals: { viewport: { value: "w768", isRotated: false } },
+export const TC33At767: Story = {
+  name: "TC-TERMINAL-SHELL-33: narrow screens put the prompt on its own line (767px)",
+  globals: { viewport: { value: "w767", isRotated: false } },
   play: narrowPlay(),
 };

@@ -22,8 +22,8 @@ Out of scope (each has its own feature): what each command prints (`cmd-*`), the
 
 - Exact prompt text: `visitor@han3zeng:~$`, followed by one space.
 - The same prompt is shown before the live input and before every past entry's command.
-- **Viewport > 768px**: the prompt and the input (or the past command) are on one line.
-- **Viewport ≤ 768px** (Han's decision: follow the reference): the prompt is on its own line. The next line starts with `>` and a space, followed by the input (or the past command). Past entries use the same two-line layout. The input is a single line. Text longer than the line scrolls sideways inside the input, never the page (NFR-MOBILE-1).
+- **Viewport ≥ 768px**: the prompt and the input (or the past command) are on one line.
+- **Viewport < 768px** (Han's decision: follow the reference): the prompt is on its own line. The next line starts with `>` and a space, followed by the input (or the past command). Past entries use the same two-line layout. The input is a single line. Text longer than the line scrolls sideways inside the input, never the page (NFR-MOBILE-1).
 
 ### Submitting (INPUT-1, INPUT-2, INPUT-3, INPUT-4, CMD-NOT-FOUND)
 
@@ -136,7 +136,7 @@ src/terminal/
   complete.ts         complete()                         (pure)
   terminalReducer.ts  terminalReducer(), initialState()  (pure)
   Terminal.tsx        "use client"; wires the reducer, input, keyboard, focus, scroll
-  Prompt.tsx          `visitor@han3zeng:~$` + `>` line at ≤768px
+  Prompt.tsx          `visitor@han3zeng:~$` + `>` line below 768px
   EntryView.tsx       prompt line + output for one entry
   CommandInput.tsx    invisible <input> over a mirror that draws the text + █ cursor
   *.test.ts           Vitest for the pure files
@@ -190,11 +190,11 @@ type TerminalState = {
 
 - The `<input>` keeps focus, keyboard, IME and a11y. It is visually transparent (`color: transparent; caret-color: transparent`), and it sits on top of a mirror `<span>` with `white-space: pre` that renders `value.slice(0, caret)`, then `█` (or a hollow block when blurred), then `value.slice(caret)`.
 - The caret position is tracked from `selectionStart` on `input`, `select`, `keyup` and `click`, and after the Ctrl+A, Ctrl+K and ↑/↓ handlers set it with `setSelectionRange`.
-- For a single line that is longer than its box (≤768px), `CommandInput` keeps its own horizontal offset: after each change of value or caret it measures the cursor and shifts the mirror just enough to keep the cursor visible, then sets `input.scrollLeft` to the same offset so clicks land on the right character. The browser's own `input.scrollLeft` is not used as the source, because it doesn't update when the value is set from code.
+- For a single line that is longer than its box (<768px), `CommandInput` keeps its own horizontal offset: after each change of value or caret it measures the cursor and shifts the mirror just enough to keep the cursor visible, then sets `input.scrollLeft` to the same offset so clicks land on the right character. The browser's own `input.scrollLeft` is not used as the source, because it doesn't update when the value is set from code.
 
 ### Responsive
 
-- Tailwind `max-md:` covers ≤767px, but the PRD breakpoint is ≤768px. So add a custom variant in `globals.css`: `@custom-variant narrow (@media (width <= 768px));`. Then the prompt line uses `narrow:block`, and the `>` span is `hidden narrow:inline`.
+- The breakpoint is a custom variant in `globals.css`: `@custom-variant narrow (@media (width < 768px));` (the same range as Tailwind's `max-md:`, but named after its purpose). Then the prompt line uses `narrow:block`, and the `>` span is `hidden narrow:inline`.
 
 ### Test hooks
 
@@ -257,12 +257,12 @@ Test names start with the ID, e.g. `it("TC-TERMINAL-SHELL-3: ...")`. Stories use
 - **TC-TERMINAL-SHELL-29** (Storybook) [INPUT-5] Given the input is blurred, when an output area or empty page space is clicked, then the input has focus. When a link in an output is clicked, its default action is not prevented.
 - **TC-TERMINAL-SHELL-30** (Storybook) [NFR-A11Y-1] Then the input is found by `getByRole("textbox", { name: "Terminal input" })`, the entries region has `aria-live="polite"`, and the a11y addon reports no violations.
 - **TC-TERMINAL-SHELL-31** (Storybook) [UI-LAYOUT-3] Given a terminal in a short container, when 20 commands are submitted, then the input line is the last item and is scrolled into view: the container's `scrollTop + clientHeight ≈ scrollHeight`.
-- **TC-TERMINAL-SHELL-32** (Storybook) [UI-PROMPT-1] Given a viewport of 1024px, then the prompt and the input share one row (same `offsetTop`), and no `>` is visible.
-- **TC-TERMINAL-SHELL-33** (Storybook) [UI-PROMPT-1, NFR-MOBILE-1] Given a viewport of 375px (and 768px), then the prompt is on its own row, the input row and each past command row start with a visible `>`, and when a 60-character input is typed, `document.documentElement.scrollWidth <= 375` and the █ is still within the input box.
+- **TC-TERMINAL-SHELL-32** (Storybook) [UI-PROMPT-1] Given a viewport of 1024px (and 768px), then the prompt and the input share one row (same `offsetTop`), and no `>` is visible.
+- **TC-TERMINAL-SHELL-33** (Storybook) [UI-PROMPT-1, NFR-MOBILE-1] Given a viewport of 375px (and 767px), then the prompt is on its own row, the input row and each past command row start with a visible `>`, and when a 60-character input is typed, `document.documentElement.scrollWidth <= 375` and the █ is still within the input box.
 
 ### Test-tooling notes
 
-- TC-32 and TC-33 set the viewport with story `globals.viewport` and custom `parameters.viewport.options` (375, 768 and 1024px). `@storybook/addon-vitest` applies them in browser mode by calling `page.viewport()` (see `vitest-plugin/test-utils.js`).
+- TC-32 and TC-33 set the viewport with story `globals.viewport` and custom `parameters.viewport.options` (375, 767, 768 and 1024px). `@storybook/addon-vitest` applies them in browser mode by calling `page.viewport()` (see `vitest-plugin/test-utils.js`).
 - TC-27 is a proxy: story tests can't emulate media queries, so it walks `document.styleSheets` and checks that a `prefers-reduced-motion: reduce` rule sets `animation: none` on the cursor. This handles `@layer` and CSS nesting, so a Tailwind `motion-reduce:` variant or plain CSS both pass.
 - TC-31 wraps the terminal in a 200px-high scrolling container, so either the terminal or its parent can be the element that scrolls.
 - Shortcut tests check `fireEvent.keyDown(...) === false` to assert that the default was prevented.

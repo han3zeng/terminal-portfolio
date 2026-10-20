@@ -45,3 +45,5 @@ pnpm build           # static site in out/
 
 
 **Oct 20**
+- 1hr review step 4
+- 
