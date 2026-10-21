@@ -73,8 +73,8 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 | cmd-email           | [ ]  | [ ]            | [ ]  |
 | cmd-resume          | [ ]  | [ ]            | [ ]  |
 | cmd-history         | [ ]  | [ ]            | [ ]  |
-| cmd-clear           | [ ]  | [ ]            | [ ]  |
-| cmd-pwd, cmd-whoami | [ ]  | [ ]            | [ ]  |
+| cmd-clear           | [x]  | [x]            | [x]  |
+| cmd-pwd, cmd-whoami | [x]  | [x]            | [x]  |
 
 Small commands (`pwd`, `whoami`, `about`, `education`) can share one spec, or skip the skill and implement straight from the PRD.
 

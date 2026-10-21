@@ -1,2 +1,2 @@
-// CMD-PWD: stub until implementation.
-export const PWD_OUTPUT: string = "";
+// CMD-PWD: the PRD's output, one line.
+export const PWD_OUTPUT = "/home/han3zeng";

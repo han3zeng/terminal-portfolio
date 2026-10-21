@@ -1,2 +1,3 @@
-// CMD-WHOAMI: stub until implementation.
-export const WHOAMI_OUTPUT: string = "";
+// CMD-WHOAMI: the PRD's output, one line.
+export const WHOAMI_OUTPUT =
+  "A curious soul with root access to absolutely nothing";

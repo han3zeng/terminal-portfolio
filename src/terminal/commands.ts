@@ -1,5 +1,7 @@
 import { Help } from "@/commands/help/Help";
+import { Pwd } from "@/commands/pwd/Pwd";
 import { Welcome } from "@/commands/welcome/Welcome";
+import { Whoami } from "@/commands/whoami/Whoami";
 import { parseThemesArgs } from "@/themes/parseThemesArgs";
 import { ThemesOutput } from "@/themes/ThemesOutput";
 
@@ -18,7 +20,7 @@ export const commands: readonly CommandDef[] = [
   { name: "help", takesArgs: false, Output: Help },
   { name: "history", takesArgs: false, Output: Stub },
   { name: "projects", takesArgs: false, Output: Stub },
-  { name: "pwd", takesArgs: false, Output: Stub },
+  { name: "pwd", takesArgs: false, Output: Pwd },
   { name: "resume", takesArgs: false, Output: Stub },
   {
     name: "themes",
@@ -30,5 +32,5 @@ export const commands: readonly CommandDef[] = [
     },
   },
   { name: "welcome", takesArgs: false, Output: Welcome },
-  { name: "whoami", takesArgs: false, Output: Stub },
+  { name: "whoami", takesArgs: false, Output: Whoami },
 ];
