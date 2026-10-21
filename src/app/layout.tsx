@@ -16,8 +16,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
-        {/* Rendered here, not via metadata, so the script below can find it while the page parses. */}
+        {/* Rendered here, not via metadata, so it is guaranteed to come before the script below. */}
         <meta name="theme-color" content={PALETTES.dark.bg} />
+        {/* Runs while the HTML is parsed, before the first paint and before React loads:
+            sets theme-color to the saved theme and drops an unknown saved theme.
+            React effects run too late for the first frame. See src/themes/storedTheme.ts. */}
         <script dangerouslySetInnerHTML={{ __html: themeHeadScript() }} />
       </head>
       <body>

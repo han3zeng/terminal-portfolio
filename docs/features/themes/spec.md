@@ -134,11 +134,11 @@ src/themes/
   contrast.ts          contrastRatio(hexA, hexB): number   (pure, WCAG 2.x relative luminance)
   ThemesOutput.tsx     the command's Output component
   ThemeColorMeta.tsx   "use client"; keeps <meta name="theme-color"> in sync with resolvedTheme (effect only)
-  storedTheme.ts       dropUnknownStoredTheme() (client) and themeHeadScript() (the inline <head> script), sharing one rule:
-                       remove an unknown stored theme, then set theme-color to the saved theme's bg
+  storedTheme.ts       themeHeadScript(): the inline <head> script, built from applyStoredTheme() (a self-contained function,
+                       serialized with Function#toString like next-themes): drops an unknown stored theme, sets theme-color
   *.test.ts            Vitest
   Themes.stories.tsx   Storybook interaction tests
-src/app/providers.tsx  "use client"; dropUnknownStoredTheme() once, then <ThemeProvider {...THEME_PROVIDER_PROPS}><ThemeColorMeta />{children}</ThemeProvider>
+src/app/providers.tsx  "use client"; <ThemeProvider {...THEME_PROVIDER_PROPS}><ThemeColorMeta />{children}</ThemeProvider>
 src/app/layout.tsx     wraps children in <Providers>; <html suppressHydrationWarning> (next-themes sets data-theme before hydration);
                        <head><meta name="theme-color" content="#091321" /><script>{themeHeadScript()}</script></head>.
                        The meta is rendered here instead of via metadata `viewport.themeColor`, so it is
@@ -149,7 +149,7 @@ src/terminal/types.ts  CommandEffects; onSubmit(ctx, effects)
 src/terminal/Terminal.tsx  builds effects ({ setTheme } from useTheme()) unless an `effects` prop is given; passes them to onSubmit
 src/terminal/commands.ts   themes: { Output: ThemesOutput, onSubmit }
 src/terminal/Prompt.tsx, CommandInput.tsx, Terminal.tsx (hints)   color classes: text-primary, outline-primary, text-muted
-.storybook/preview.tsx  decorator: <Providers>; beforeEach: localStorage.removeItem("theme"), remove data-theme from <html>
+.storybook/preview.tsx  decorator: runs themeHeadScript(), then <Providers>; beforeEach: localStorage.removeItem("theme"), remove data-theme from <html>
 ```
 
 ### Types
@@ -235,7 +235,7 @@ Test names start with the ID, e.g. `it("TC-THEMES-2: ...")`.
 - Story names must be string literals: Storybook reads `name` statically, so a name built in a helper function is ignored and the test is named after the export (TC-15 first showed as "missing" in `spec:status` for this reason).
 - Stories can't reload the page. TC-11 and TC-12 set `localStorage` in a **story-level `beforeEach`** before the story renders, which is what a reload does for next-themes.
 - Probe result: Storybook runs **loaders before `beforeEach`**, so a loader's `localStorage` value is wiped by the preview's reset. `beforeEach` hooks run project → component → story, so a story-level `beforeEach` runs after the reset and works.
-- Probe result: next-themes **does not validate** the stored value. Its inline script and its client state both apply `localStorage["theme"]` as is (`not-a-theme` → `data-theme="not-a-theme"`; the page still looks dark only because `:root` holds the dark values). TC-12 therefore needs the implementation to drop unknown stored values before next-themes reads them: in the `<head>` script on the real page (it runs before next-themes' script), and on the client before `ThemeProvider` first renders (stories have no head script).
+- Probe result: next-themes **does not validate** the stored value. Its inline script and its client state both apply `localStorage["theme"]` as is (`not-a-theme` → `data-theme="not-a-theme"`; the page still looks dark only because `:root` holds the dark values). TC-12 therefore needs the implementation to drop unknown stored values before next-themes reads them: in the `<head>` script on the real page (it runs before next-themes' script), and, in Storybook (which has no HTML `<head>`), by `.storybook/preview.tsx` running the same head script before each story renders.
 - Probe result: a Playwright init script runs before `<html>` exists (`document.documentElement` is `null`), so TC-16's `MutationObserver` observes `document` with `subtree: true` and filters on `<html>`'s `data-theme`. The "no flash before paint" part is covered by TC-16 against the real built page.
 - TC-16 builds the site like layout's `scripts/export.test.ts` (with `NODE_ENV=production`), serves `out/` with a small `node:http` static server on a free port (mapping `/terminal-portfolio/` to `out/`), and launches Chromium through the `playwright` package. Probe it once first (implement-feature Phase A step 2): that the first `requestAnimationFrame` callback runs before any later frame, and that `chromium.launch()` works in the unit project's Node environment.
 - Stories can't emulate `prefers-color-scheme` (see terminal-shell TC-27); "the OS setting is ignored" is covered by `enableSystem: false` in TC-6.
