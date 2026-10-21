@@ -4,6 +4,8 @@
 //   pnpm spec:status                   all features
 //   pnpm spec:status terminal-shell    one feature
 //   pnpm spec:status --report <file>   reuse an existing Vitest JSON report instead of running tests
+//   pnpm spec:status --e2e-report <file>  reuse an existing Playwright JSON report (with --report;
+//                                         without it, --report alone skips the e2e tests)
 //   pnpm spec:status --features <dir>  read specs from <dir>/*/spec.md (used by the script's own tests)
 //
 // Exits 0 only if every reported ID is passing and no test uses an unknown ID.
@@ -26,6 +28,7 @@ function takeOption(name) {
   return value;
 }
 let reportPath = takeOption("--report");
+let e2eReportPath = takeOption("--e2e-report");
 const featuresDir = path.resolve(
   takeOption("--features") ?? path.join(root, "docs/features"),
 );
@@ -66,10 +69,9 @@ const allSpecIds = new Set([...specIds.values()].flat());
 // ---------- test results ----------
 
 if (!reportPath) {
-  reportPath = path.join(
-    mkdtempSync(path.join(tmpdir(), "spec-status-")),
-    "report.json",
-  );
+  const dir = mkdtempSync(path.join(tmpdir(), "spec-status-"));
+  reportPath = path.join(dir, "report.json");
+  e2eReportPath = path.join(dir, "e2e-report.json");
   const run = spawnSync(
     "pnpm",
     ["exec", "vitest", "run", "--reporter=json", `--outputFile=${reportPath}`],
@@ -81,6 +83,21 @@ if (!reportPath) {
     console.error(run.stderr);
     process.exit(2);
   }
+  const e2e = spawnSync(
+    "pnpm",
+    ["exec", "playwright", "test", "--reporter=json"],
+    {
+      cwd: root,
+      stdio: ["ignore", "ignore", "pipe"],
+      encoding: "utf8",
+      env: { ...process.env, PLAYWRIGHT_JSON_OUTPUT_NAME: e2eReportPath },
+    },
+  );
+  if (!existsSync(e2eReportPath)) {
+    console.error("Playwright did not write a report. Its output:\n");
+    console.error(e2e.stderr);
+    process.exit(2);
+  }
 }
 
 const report = JSON.parse(readFileSync(reportPath, "utf8"));
@@ -88,9 +105,33 @@ const tests = report.testResults.flatMap((file) =>
   file.assertionResults.map((t) => ({ title: t.title, status: t.status })),
 );
 // A run-level error (e.g. the browser crashed) can leave tests unreported.
-const runErrors = report.testResults.filter(
-  (f) => f.status === "failed" && f.message,
-);
+const runErrors = report.testResults
+  .filter((f) => f.status === "failed" && f.message)
+  .map((f) => path.relative(root, f.name));
+
+// Playwright's report nests suites; each spec has one test per project.
+if (e2eReportPath) {
+  const e2eReport = JSON.parse(readFileSync(e2eReportPath, "utf8"));
+  const collect = (suite) => {
+    for (const spec of suite.specs ?? []) {
+      for (const t of spec.tests) {
+        const status =
+          t.status === "skipped"
+            ? "skipped"
+            : t.status === "expected"
+              ? "passed"
+              : "failed";
+        tests.push({ title: spec.title, status });
+      }
+    }
+    for (const child of suite.suites ?? []) collect(child);
+  };
+  for (const suite of e2eReport.suites ?? []) collect(suite);
+  // e.g. the web server failed to start, so no test ran.
+  for (const error of e2eReport.errors ?? []) {
+    runErrors.push(`playwright: ${error.message?.split("\n")[0] ?? "error"}`);
+  }
+}
 
 // The ID is everything before the first ":" in the test name.
 const byId = new Map();
@@ -146,7 +187,7 @@ if (unknown.length > 0) {
 if (runErrors.length > 0) {
   ok = false;
   console.log("\nTest files that failed to run:");
-  for (const f of runErrors) console.log(`  ${path.relative(root, f.name)}`);
+  for (const f of runErrors) console.log(`  ${f}`);
 }
 
 const total = totals.passing + totals.failing + totals.missing;

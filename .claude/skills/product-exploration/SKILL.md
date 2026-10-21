@@ -86,7 +86,7 @@ Each test case has:
 
 - An ID `TC-<FEATURE>-<n>`, where `<FEATURE>` is the feature slug in upper case (e.g. `TC-THEMES-2`, `TC-TERMINAL-SHELL-5`). IDs are never reused or renumbered.
 - The PRD IDs it covers.
-- Its test layer: Vitest (pure functions) or Storybook interaction test (components).
+- Its test layer: Vitest (pure functions), Storybook interaction test (components), or Playwright e2e (the built site: static HTML, behavior before hydration, real reloads).
 
 The test that implements a case must start its name with the ID, e.g. `it("TC-THEMES-2: unknown theme shows usage", ...)`.
 
@@ -119,7 +119,7 @@ PRD: <IDs covered>
 
 ## Test cases
 
-- TC-<FEATURE>-1 (Vitest | Storybook) [PRD-ID] Given … when … then …
+- TC-<FEATURE>-1 (Vitest | Storybook | Playwright) [PRD-ID] Given … when … then …
 ```
 
 Do not implement source code.

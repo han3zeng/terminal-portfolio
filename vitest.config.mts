@@ -24,8 +24,8 @@ export default defineConfig({
           name: "unit",
           environment: "node",
           include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.ts"],
-          // Several scripts/ tests run `next build` into the same out/ and .next/;
-          // running files one at a time keeps those builds from overlapping.
+          // scripts/export.test.ts runs `next build` into out/ and .next/; running files
+          // one at a time keeps a second build test from overlapping it.
           fileParallelism: false,
         },
       },

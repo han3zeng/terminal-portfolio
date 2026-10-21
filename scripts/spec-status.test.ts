@@ -5,8 +5,8 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-// Runs the real script against fixture specs and a hand-made Vitest JSON report,
-// so these tests never run Vitest recursively.
+// Runs the real script against fixture specs and hand-made Vitest and Playwright JSON
+// reports, so these tests never run Vitest or Playwright recursively.
 
 const SCRIPT = path.join(import.meta.dirname, "spec-status.mjs");
 
@@ -16,6 +16,11 @@ type Fixture = {
   tests: [title: string, status: Status][];
   // A test file that failed to run (e.g. the browser crashed).
   brokenFile?: string;
+  // A Playwright report: test titles with Playwright's statuses, and run-level errors.
+  e2e?: {
+    tests: [title: string, status: "expected" | "unexpected" | "skipped"][];
+    errors?: string[];
+  };
   args?: string[];
 };
 
@@ -25,7 +30,7 @@ afterEach(() => {
     rmSync(dir, { recursive: true, force: true });
 });
 
-function runStatus({ specs, tests, brokenFile, args = [] }: Fixture) {
+function runStatus({ specs, tests, brokenFile, e2e, args = [] }: Fixture) {
   const dir = mkdtempSync(path.join(tmpdir(), "spec-status-test-"));
   dirs.push(dir);
 
@@ -54,9 +59,44 @@ function runStatus({ specs, tests, brokenFile, args = [] }: Fixture) {
   const reportPath = path.join(dir, "report.json");
   writeFileSync(reportPath, JSON.stringify({ testResults }));
 
+  const e2eArgs: string[] = [];
+  if (e2e) {
+    const e2ePath = path.join(dir, "e2e-report.json");
+    writeFileSync(
+      e2ePath,
+      JSON.stringify({
+        suites: [
+          {
+            title: "a.spec.ts",
+            specs: [],
+            suites: [
+              {
+                title: "describe",
+                specs: e2e.tests.map(([title, status]) => ({
+                  title,
+                  tests: [{ status }],
+                })),
+              },
+            ],
+          },
+        ],
+        errors: (e2e.errors ?? []).map((message) => ({ message })),
+      }),
+    );
+    e2eArgs.push("--e2e-report", e2ePath);
+  }
+
   const result = spawnSync(
     process.execPath,
-    [SCRIPT, ...args, "--features", featuresDir, "--report", reportPath],
+    [
+      SCRIPT,
+      ...args,
+      "--features",
+      featuresDir,
+      "--report",
+      reportPath,
+      ...e2eArgs,
+    ],
     { encoding: "utf8" },
   );
   return { code: result.status, out: result.stdout, err: result.stderr };
@@ -202,6 +242,50 @@ describe("spec:status", () => {
     });
     expect(out).toContain("Test files that failed to run:");
     expect(out).toContain("Broken.stories.tsx");
+    expect(code).toBe(1);
+  });
+
+  it("e2e report: Playwright tests count, in nested suites; unexpected or skipped is failing", () => {
+    const passing = runStatus({
+      specs: { foo: FOO_SPEC },
+      tests: [["TC-FOO-1: a", "passed"]],
+      e2e: { tests: [["TC-FOO-2: first paint", "expected"]] },
+    });
+    expect(stateOf(passing.out, "TC-FOO-2")).toBe("passing");
+    expect(passing.code).toBe(0);
+
+    const failing = runStatus({
+      specs: { foo: FOO_SPEC },
+      tests: [["TC-FOO-1: a", "passed"]],
+      e2e: {
+        tests: [
+          ["TC-FOO-2: light", "expected"],
+          ["TC-FOO-2: dark", "unexpected"],
+          ["TC-FOO-2: matrix", "skipped"],
+        ],
+      },
+    });
+    expect(stateOf(failing.out, "TC-FOO-2")).toBe("failing");
+    expect(failing.out).toContain("2 of 3 not passing, 1 skipped");
+    expect(failing.code).toBe(1);
+  });
+
+  it("e2e report: a run-level Playwright error (e.g. the web server failed) is reported, exit 1", () => {
+    const { code, out } = runStatus({
+      specs: { foo: FOO_SPEC },
+      tests: [
+        ["TC-FOO-1: a", "passed"],
+        ["TC-FOO-2: b", "passed"],
+      ],
+      e2e: {
+        tests: [],
+        errors: ["Error: Process from config.webServer exited early.\nmore"],
+      },
+    });
+    expect(out).toContain("Test files that failed to run:");
+    expect(out).toContain(
+      "playwright: Error: Process from config.webServer exited early.",
+    );
     expect(code).toBe(1);
   });
 });

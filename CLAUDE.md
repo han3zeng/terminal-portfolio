@@ -16,6 +16,7 @@ Han's portfolio: a single-page, terminal-style website. This repo is also a prac
 - Tailwind CSS v4
 - next-themes for theme switching (themes: dark, light, matrix, ubuntu)
 - Vitest for unit tests of pure functions
+- Playwright Test (`e2e/`) for behavior that only exists in the built site: what the static HTML and inline scripts do before React hydrates
 - Storybook for component tests: one story per command output, plus interaction tests (`play`) for terminal behavior such as submitting commands and `clear`
 - ESLint + Prettier
 - JetBrains Mono via `next/font`
@@ -29,6 +30,7 @@ Package manager: pnpm (never npm or yarn).
 - `pnpm build`: static export to `out/`
 - `pnpm lint` / `pnpm typecheck` / `pnpm format`
 - `pnpm test`: all tests. `pnpm test:unit` for Vitest unit tests (`src/**/*.test.ts(x)` and `scripts/**/*.test.ts`, Node), `pnpm test:storybook` for stories run as tests in headless Chromium
+- `pnpm test:e2e`: Playwright tests in `e2e/` against the real static export. `playwright.config.ts` builds the site and serves `out/` under `/terminal-portfolio/`; tests use `page.goto("./")`. One case: `pnpm test:e2e -g "TC-THEMES-16"`
 - `pnpm test:unit -t "TC-THEMES-2"`: run one test case by ID
 - `pnpm spec:status [feature]`: for each `TC-*` ID in the specs, shows missing, failing or passing. Exits 0 only when all pass. This, not `pnpm test` alone, is the definition of a feature's tests being done.
 - `pnpm storybook`: Storybook UI on port 6006
