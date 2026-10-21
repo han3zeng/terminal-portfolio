@@ -61,8 +61,12 @@ How to add an entry: one block per session, newest at the bottom. Hours are your
   - Update cmd-help
 - **Output:**
 - **Friction:**
-  - I didin't specify the end-to-end testing in original PRD. So agent just use plain node 
+  - I didn't specify the end-to-end testing in original PRD. So agent just use plain node 
 - **Insight:**
+  - The agent would find the solution it sees fit to solve a problem which is fast and direct but not good for maintainability
+    - Import built file fro e2e without using human-friendly config file for e2e
+    - uglify the code into single string and insert it
+    - Use vitest to confirm SEO related tag has been set correctly inside the built html page. But the behavior is more an e2e test should be handled by playwright.
   
 
 
