@@ -61,6 +61,7 @@ How to add an entry: one block per session, newest at the bottom. Hours are your
   - Update cmd-help
 - **Output:**
 - **Friction:**
+  - I didin't specify the end-to-end testing in original PRD. So agent just use plain node 
 - **Insight:**
   
 
