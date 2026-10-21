@@ -52,8 +52,19 @@ How to add an entry: one block per session, newest at the bottom. Hours are your
   - To describe responsive layout in plain English is hard
       - flex-row, flex-reverser
 - **Insight:**
-  - Need prehook setting to prevent agent from accessing original source code
-  - 
+  - Need prehook setting to prevent agent from accessing original source code (
+
+### Oct 20 — Step 5: automate the loop (5 hrs)
+
+- **Did:**
+  - Review and update all commits messages
+  - Update cmd-help
+- **Output:**
+- **Friction:**
+- **Insight:**
+  
+
+
 
 ## Blog threads
 
