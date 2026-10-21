@@ -140,7 +140,7 @@ src/app/
   favicon.ico            deleted
   Page.stories.tsx       Storybook interaction tests for the page shell (renders `Home` from page.tsx)
 src/terminal/CommandInput.tsx   outline-foreground → outline-fg
-scripts/export.test.ts   Vitest: builds once, then checks out/index.html and the image files
+e2e/layout-head.spec.ts  Playwright: playwright.config.ts builds and serves out/ under /terminal-portfolio/ (TC 1–4)
 ```
 
 ### Metadata
@@ -206,7 +206,7 @@ Add `html { height: 100% }` and `body { min-height: 100% }` in `globals.css` so 
 
 ### Order of work
 
-1. `scripts/export.test.ts` (TC 1–4) and `src/app/Page.stories.tsx` (TC 5–10). Confirm they fail for the expected reason.
+1. `e2e/layout-head.spec.ts` (TC 1–4) and `src/app/Page.stories.tsx` (TC 5–10). Confirm they fail for the expected reason.
 2. `globals.css` tokens and body styles, `CommandInput` class rename (TC 5, 6, 7).
 3. `page.tsx` `h1`, `metadata.ts`, `layout.tsx` (TC 1, 4, 10).
 4. `og-font.ts`, `og-image.tsx`, `icon-image.tsx` and the three `*.png/route.tsx` handlers; delete `favicon.ico` (TC 2, 3).
@@ -216,14 +216,14 @@ Add `html { height: 100% }` and `body { min-height: 100% }` in `globals.css` so 
 
 Test names start with the ID, e.g. `it("TC-LAYOUT-2: ...")`.
 
-### Vitest (build output, `scripts/export.test.ts`)
+### Playwright e2e (`e2e/layout-head.spec.ts`, the built site)
 
-These run `pnpm build` once in `beforeAll` (timeout ~3 min), then read files under `out/`. PNG sizes are read from the IHDR header (bytes 16–23), so no image library is needed.
+These load the static export served under `/terminal-portfolio/` (by `webServer` in `playwright.config.ts`) with JavaScript disabled, so the DOM is the shipped `out/index.html` before React runs. Image files are fetched from the same server by their URL's path. PNG sizes are read from the IHDR header (bytes 16–23), so no image library is needed.
 
-- **TC-LAYOUT-1** (Vitest) [NFR-SEO-1] Given the static export, then `out/index.html` has `<html lang="en">`, `<title>Han Zeng — Terminal Portfolio</title>`, `meta[name=description]` with the description, `og:title`, `og:description`, `og:type` = `website`, `og:url` = `https://han3zeng.github.io/terminal-portfolio/`, `twitter:card` = `summary_large_image`, `twitter:title` and `twitter:description`.
-- **TC-LAYOUT-2** (Vitest) [NFR-SEO-1, NFR-BUILD-2] Given the static export, then `og:image` and `twitter:image` are the same absolute URL starting with `https://han3zeng.github.io/terminal-portfolio/` (and not containing `/terminal-portfolio/terminal-portfolio`), `og:image:width` = `1200`, `og:image:height` = `630`, `og:image:alt` = the title, and the file at that path under `out/` is a PNG of 1200×630.
-- **TC-LAYOUT-3** (Vitest) [NFR-SEO-1, NFR-BUILD-2] Given the static export, then there is a `link[rel=icon]` whose `href` starts with `/terminal-portfolio/` and whose file under `out/` is a 32×32 PNG, a `link[rel=apple-touch-icon]` with the same base path whose file is a 180×180 PNG, and no `link` points to `favicon.ico`.
-- **TC-LAYOUT-4** (Vitest) [UI-LAYOUT-1, NFR-MOBILE-1] Given the static export, then `meta[name=theme-color]` is `#091321` and `meta[name=viewport]` is `width=device-width, initial-scale=1`.
+- **TC-LAYOUT-1** (Playwright) [NFR-SEO-1] Given the static export, then `out/index.html` has `<html lang="en">`, `<title>Han Zeng — Terminal Portfolio</title>`, `meta[name=description]` with the description, `og:title`, `og:description`, `og:type` = `website`, `og:url` = `https://han3zeng.github.io/terminal-portfolio/`, `twitter:card` = `summary_large_image`, `twitter:title` and `twitter:description`.
+- **TC-LAYOUT-2** (Playwright) [NFR-SEO-1, NFR-BUILD-2] Given the static export, then `og:image` and `twitter:image` are the same absolute URL starting with `https://han3zeng.github.io/terminal-portfolio/` (and not containing `/terminal-portfolio/terminal-portfolio`), `og:image:width` = `1200`, `og:image:height` = `630`, `og:image:alt` = the title, and the file served at that path is a PNG of 1200×630.
+- **TC-LAYOUT-3** (Playwright) [NFR-SEO-1, NFR-BUILD-2] Given the static export, then there is a `link[rel=icon]` whose `href` starts with `/terminal-portfolio/` and whose served file is a 32×32 PNG, a `link[rel=apple-touch-icon]` with the same base path whose file is a 180×180 PNG, and no `link` points to `favicon.ico`.
+- **TC-LAYOUT-4** (Playwright) [UI-LAYOUT-1, NFR-MOBILE-1] Given the static export, then `meta[name=theme-color]` is `#091321` and `meta[name=viewport]` is `width=device-width, initial-scale=1`.
 
 ### Storybook interaction tests (`src/app/Page.stories.tsx`, the real page)
 
@@ -236,8 +236,7 @@ These run `pnpm build` once in `beforeAll` (timeout ~3 min), then read files und
 
 ### Test-tooling notes
 
-- TC 1–4 depend on a full `next build`. It writes `out/` and `.next/` and doesn't conflict with a running `next dev` (dev uses `.next/dev`). The build takes about 7s, so `pnpm test:unit` gets about that much slower. If that hurts, a later change can move `scripts/export.test.ts` into its own Vitest project; that is a tooling change, not a spec change.
-- Vitest sets `NODE_ENV=test`. A `next build` that inherits it fails while prerendering `/_global-error` (`Cannot read properties of null (reading 'useContext')`), so the test runs the build with `NODE_ENV=production`.
+- TC 1–4 depend on a full `next build`, which Playwright's `webServer` runs. It writes `out/` and `.next/` and doesn't conflict with a running `next dev` (dev uses `.next/dev`). TC 1–4 moved from Vitest (`scripts/export.test.ts`) to Playwright on 2026-10-21, so `pnpm test` builds once instead of twice.
 - Browser console output from a story isn't shown in the Vitest run. To see values while debugging, put them in a thrown error or an assertion message.
 - Probe result: Storybook keeps its own hidden UI (`sb-loader`, `sb-previewBlock`, `sb-errordisplay`, …) inside `<body>`, and that UI has rounded corners and borders. The page-wide checks in TC 5, 7 and 8 therefore look at `<html>`, `<body>`, the story root and its descendants only.
 - Probe result: in stories, `Home` renders with the `@/` alias, `document.fonts.check('16px "JetBrains Mono"')` is true (the font really loads), and the document (not an inner element) scrolls at 1280×400.

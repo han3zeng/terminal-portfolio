@@ -43,6 +43,7 @@ Steps 3 and 5 were done by hand for the first feature (harness Step 4), then aut
 | Vitest unit tests           | Pure functions: parsing, completion, the terminal reducer         | `src/**/*.test.ts`              | Node              |
 | Storybook interaction tests | Components: typing, keyboard shortcuts, focus, layout, a11y       | `src/**/*.stories.tsx` (`play`) | headless Chromium |
 | Script tests                | `spec:status` itself, against fixture specs and hand-made reports | `scripts/*.test.ts`             | Node              |
+| Playwright e2e tests        | The built static export: head tags, served files, first paint     | `e2e/*.spec.ts`                 | headless Chromium |
 
 Stories use a fake command registry, so shell tests don't break when a command's text changes.
 

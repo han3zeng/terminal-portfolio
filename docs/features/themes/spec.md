@@ -231,7 +231,7 @@ Test names start with the ID, e.g. `it("TC-THEMES-2: ...")`.
 
 ### Test-tooling notes
 
-- `vitest.config.mts`: the unit project runs its files one at a time (`fileParallelism: false`), so a future second build test can't overwrite `out/` and `.next/` while `scripts/export.test.ts` (layout) builds. TC-THEMES-16 moved to Playwright (2026-10-21); its `webServer` runs `next build` too, so don't run `pnpm test:unit` and `pnpm test:e2e` at the same time.
+- TC-THEMES-16 moved to Playwright (2026-10-21). Its `webServer` runs `next build`; no Vitest test builds the site any more (layout's TC 1–4 moved to Playwright the same day).
 - Story names must be string literals: Storybook reads `name` statically, so a name built in a helper function is ignored and the test is named after the export (TC-15 first showed as "missing" in `spec:status` for this reason).
 - Stories can't reload the page. TC-11 and TC-12 set `localStorage` in a **story-level `beforeEach`** before the story renders, which is what a reload does for next-themes.
 - Probe result: Storybook runs **loaders before `beforeEach`**, so a loader's `localStorage` value is wiped by the preview's reset. `beforeEach` hooks run project → component → story, so a story-level `beforeEach` runs after the reset and works.
