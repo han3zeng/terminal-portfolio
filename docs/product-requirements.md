@@ -314,7 +314,7 @@ Want to get to know me better? Type `help` to see how you can explore here.
 **Print**
 
 ```
-visitor
+A curious soul with root access to absolutely nothing
 ```
 
 ### Invalid commands — CMD-NOT-FOUND
