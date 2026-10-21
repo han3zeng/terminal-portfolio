@@ -132,12 +132,14 @@ export const TC5: Story = {
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
       window.innerWidth,
     );
-    const resume = help
-      .getByText(/^\s*resume\s+My career highlights/)
-      .getBoundingClientRect();
-    const email = help
-      .getByText(/^\s*email\s+Shoot me an email/)
-      .getBoundingClientRect();
-    await expect(resume.height).toBeGreaterThan(email.height * 1.5);
+    const rows = (el: HTMLElement) =>
+      Math.round(
+        el.getBoundingClientRect().height /
+          parseFloat(getComputedStyle(el).lineHeight),
+      );
+    const resume = help.getByText(/^\s*resume\s+My career highlights/);
+    const email = help.getByText(/^\s*email\s+Shoot me an email/);
+    await expect(rows(resume)).toBeGreaterThanOrEqual(2);
+    await expect(rows(email)).toBe(1);
   },
 };
