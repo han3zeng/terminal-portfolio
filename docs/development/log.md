@@ -41,12 +41,19 @@ How to add an entry: one block per session, newest at the bottom. Hours are your
   - The agent had to stop and ask before changing an approved test. Slower, but the right call.
 - **Insight:** TODO(Han)
 
-### Oct 20 — Step 5: automate the loop (TODO h)
+### Oct 20 — Step 5: automate the loop (5 hrs)
 
-- **Did:** added `pnpm spec:status` and the `implement-feature` skill, built from the Step 4 notes.
+- **Did:**
+  - added `pnpm spec:` and the `implement-feature` skill, built from the Step 4 notes.
+  - Completed layout, themes, cmd-welcome and cmd-help
 - **Output:** `scripts/spec-status.mjs`, `.claude/skills/implement-feature/SKILL.md`.
-- **Friction:** TODO(Han)
-- **Insight:** TODO(Han)
+- **Friction:**
+  - Find out agent peeks the original source code
+  - To describe responsive layout in plain English is hard
+      - flex-row, flex-reverser
+- **Insight:**
+  - Need prehook setting to prevent agent from accessing original source code
+  - 
 
 ## Blog threads
 
@@ -64,3 +71,11 @@ Ideas to collect as you go, so the post writes itself:
 - For rapid development spec becomes an memory record for confirmation if we found something unexpected in component or vitest.
 - If we only have limited time, it is hard to review such detail spec, or we need to specify how spec should be written.
   - The specs generate by skill are just too granular
+- The agent act on its own to find out the source code
+
+
+
+### TO Understand
+- pre hook vs. permission on setting rules
+
+
