@@ -5,36 +5,40 @@ export type HelpSection = {
 
 // The PRD's CMD-HELP block as data, in the PRD's order (TC-CMD-HELP-1 compares the
 // rendered text with the PRD; TC-CMD-HELP-2 checks the names against the registry).
-export const HELP_INTRO = "These are all available commands in this terminal.";
+export const HELP_INTRO = "Available commands in this terminal";
+
+// A command line: two-space indent, the name padded to a 12-character column.
+export const helpLine = (name: string, description: string) =>
+  `  ${name.padEnd(12)}${description}`;
 
 export const HELP_SECTIONS: HelpSection[] = [
   {
-    heading: "About me",
+    heading: "ABOUT ME",
     lines: [
-      { name: "about", description: "want to know more about me?" },
-      { name: "education", description: "my education background" },
-      { name: "email", description: "send an email to me" },
+      { name: "about", description: "Curious about me? Take a peek" },
+      { name: "education", description: "Where I earned my brainpower" },
+      { name: "email", description: "Shoot me an email" },
+      { name: "projects", description: "See what I've been cooking" },
       {
-        name: "projects",
-        description: "view all work that I have participated in",
+        name: "resume",
+        description: "My career highlights, minus all the embarrassing bits",
       },
-      { name: "resume", description: "download my resume" },
-      { name: "connect", description: "check out my social accounts" },
-      { name: "themes", description: "check available themes" },
-      { name: "welcome", description: "display hero section" },
+      { name: "connect", description: "Let's be internet friends" },
+      { name: "themes", description: "Change the vibe" },
+      { name: "welcome", description: "Back to square one" },
     ],
   },
   {
-    heading: "Utilities",
-    lines: [{ name: "help", description: "list all available commands" }],
+    heading: "UTILITIES",
+    lines: [{ name: "help", description: "List all available commands" }],
   },
   {
-    heading: "Typical terminal commands",
+    heading: "TERMINAL",
     lines: [
-      { name: "clear", description: "clear the terminal" },
-      { name: "history", description: "view command history" },
-      { name: "pwd", description: "print current working directory" },
-      { name: "whoami", description: "people who want to be my friend" },
+      { name: "clear", description: "Clear the terminal" },
+      { name: "history", description: "View command history" },
+      { name: "pwd", description: "Print current working directory" },
+      { name: "whoami", description: "A stranger, for now" },
     ],
   },
 ];

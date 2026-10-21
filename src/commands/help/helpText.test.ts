@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { commands } from "@/terminal/commands";
 
-import { HELP_INTRO, HELP_SECTIONS } from "./helpText";
+import { HELP_INTRO, HELP_SECTIONS, helpLine } from "./helpText";
 
 // The code block under `### help — CMD-HELP` in the PRD.
 function prdHelpBlock(): string {
@@ -26,7 +26,7 @@ const renderText = () =>
     ...HELP_SECTIONS.map((section) =>
       [
         section.heading,
-        ...section.lines.map((l) => `- ${l.name}: ${l.description}`),
+        ...section.lines.map((l) => helpLine(l.name, l.description)),
       ].join("\n"),
     ),
   ].join("\n\n");

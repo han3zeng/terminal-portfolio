@@ -6,26 +6,26 @@ import { Terminal } from "@/terminal/Terminal";
 // Test hooks (cmd-help spec): help (output root), help-heading (each section heading).
 // The expected text is the PRD's CMD-HELP block, copied here because stories run in the browser.
 
-const PRD_HELP = `These are all available commands in this terminal.
+const PRD_HELP = `Available commands in this terminal
 
-About me
-- about: want to know more about me?
-- education: my education background
-- email: send an email to me
-- projects: view all work that I have participated in
-- resume: download my resume
-- connect: check out my social accounts
-- themes: check available themes
-- welcome: display hero section
+ABOUT ME
+  about       Curious about me? Take a peek
+  education   Where I earned my brainpower
+  email       Shoot me an email
+  projects    See what I've been cooking
+  resume      My career highlights, minus all the embarrassing bits
+  connect     Let's be internet friends
+  themes      Change the vibe
+  welcome     Back to square one
 
-Utilities
-- help: list all available commands
+UTILITIES
+  help        List all available commands
 
-Typical terminal commands
-- clear: clear the terminal
-- history: view command history
-- pwd: print current working directory
-- whoami: people who want to be my friend`;
+TERMINAL
+  clear       Clear the terminal
+  history     View command history
+  pwd         Print current working directory
+  whoami      A stranger, for now`;
 
 const VIEWPORTS = {
   w375: {
@@ -98,22 +98,20 @@ export const TC4: Story = {
 
     const headings = help.getAllByTestId("help-heading");
     await expect(headings.map((h) => h.textContent)).toEqual([
-      "About me",
-      "Utilities",
-      "Typical terminal commands",
+      "ABOUT ME",
+      "UTILITIES",
+      "TERMINAL",
     ]);
     for (const heading of headings) {
       await expect(getComputedStyle(heading).color).toBe("rgb(143, 255, 224)");
     }
     const FG = "rgb(211, 233, 230)";
     await expect(
-      getComputedStyle(
-        help.getByText("These are all available commands in this terminal."),
-      ).color,
+      getComputedStyle(help.getByText("Available commands in this terminal"))
+        .color,
     ).toBe(FG);
     await expect(
-      getComputedStyle(help.getByText("- about: want to know more about me?"))
-        .color,
+      getComputedStyle(help.getByText(/^\s*about\s+Curious about me\?/)).color,
     ).toBe(FG);
 
     const lists = help.getAllByRole("list");
@@ -134,12 +132,12 @@ export const TC5: Story = {
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
       window.innerWidth,
     );
-    const projects = help
-      .getByText("- projects: view all work that I have participated in")
+    const resume = help
+      .getByText(/^\s*resume\s+My career highlights/)
       .getBoundingClientRect();
-    const pwd = help
-      .getByText("- pwd: print current working directory")
+    const email = help
+      .getByText(/^\s*email\s+Shoot me an email/)
       .getBoundingClientRect();
-    await expect(projects.height).toBeGreaterThan(pwd.height * 1.5);
+    await expect(resume.height).toBeGreaterThan(email.height * 1.5);
   },
 };

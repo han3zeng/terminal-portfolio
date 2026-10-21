@@ -14,29 +14,29 @@ Out of scope: argument handling (`help foo` → `Usage: help`, terminal-shell, d
 
 ### Output (CMD-HELP)
 
-Exactly the PRD's block (17 non-blank lines and 3 blank lines; no trailing spaces):
+Exactly the PRD's block (17 non-blank lines and 3 blank lines; no trailing spaces). Each command line is two spaces, the name padded with spaces to 12 characters, then the description:
 
 ```
-These are all available commands in this terminal.
+Available commands in this terminal
 
-About me
-- about: want to know more about me?
-- education: my education background
-- email: send an email to me
-- projects: view all work that I have participated in
-- resume: download my resume
-- connect: check out my social accounts
-- themes: check available themes
-- welcome: display hero section
+ABOUT ME
+  about       Curious about me? Take a peek
+  education   Where I earned my brainpower
+  email       Shoot me an email
+  projects    See what I've been cooking
+  resume      My career highlights, minus all the embarrassing bits
+  connect     Let's be internet friends
+  themes      Change the vibe
+  welcome     Back to square one
 
-Utilities
-- help: list all available commands
+UTILITIES
+  help        List all available commands
 
-Typical terminal commands
-- clear: clear the terminal
-- history: view command history
-- pwd: print current working directory
-- whoami: people who want to be my friend
+TERMINAL
+  clear       Clear the terminal
+  history     View command history
+  pwd         Print current working directory
+  whoami      A stranger, for now
 ```
 
 - The order of sections and of lines inside them is the PRD's (not alphabetical, not registry order).
@@ -45,16 +45,16 @@ Typical terminal commands
 
 ### Colors (Han's decision)
 
-- The three section headings `About me`, `Utilities`, `Typical terminal commands` are in `primary`.
-- Everything else (the first line and every `- name: description` line) is in `fg`.
+- The three section headings `ABOUT ME`, `UTILITIES`, `TERMINAL` are in `primary`.
+- Everything else (the first line and every command line) is in `fg`.
 
 ### Wrapping (NFR-MOBILE-1)
 
-- Lines wrap at the terminal edge (`white-space: pre-wrap`); there's no horizontal scroll. At 375px the longest line (`- projects: view all work that I have participated in`, 53 characters) wraps onto a second row. The wrapped part starts at the left edge (no hanging indent).
+- Lines wrap at the terminal edge (`white-space: pre-wrap`); there's no horizontal scroll. At 375px the longest line (the `resume` line, 67 characters) wraps onto a second row. The wrapped part starts at the left edge (no hanging indent).
 
 ### Accessibility
 
-- The headings are styled text, not `<h2>` elements: the page's only heading is the layout's hidden `<h1>`, and output from many `help` runs would otherwise flood the heading outline. Each section is a `<div>` for the heading followed by a `<ul>` of its lines, so screen readers announce "list, 8 items". The `- ` prefix is real text (it's part of the PRD's output) and the list has `list-style: none`.
+- The headings are styled text, not `<h2>` elements: the page's only heading is the layout's hidden `<h1>`, and output from many `help` runs would otherwise flood the heading outline. Each section is a `<div>` for the heading followed by a `<ul>` of its lines, so screen readers announce "list, 8 items". The leading spaces and name padding are real text (they're part of the PRD's output) and the list has `list-style: none`.
 
 ### Reference vs PRD
 
@@ -84,16 +84,16 @@ src/commands/help/
 src/terminal/commands.ts   help: { Output: Help }
 ```
 
-- Each line renders as `- ${name}: ${description}`.
+- Each line renders as `  ${name.padEnd(12)}${description}`.
 
 ### Rendering
 
 ```
 <div data-testid="help" class="whitespace-pre-wrap">
-  <div>These are all available commands in this terminal.</div>
+  <div>Available commands in this terminal</div>
   <div>&nbsp;</div>                                   — one empty line
-  <div data-testid="help-heading" class="text-primary">About me</div>
-  <ul class="list-none"><li>- about: want to know more about me?</li>…</ul>
+  <div data-testid="help-heading" class="text-primary">ABOUT ME</div>
+  <ul class="list-none"><li>  about       Curious about me? Take a peek</li>…</ul>
   …
 </div>
 ```
@@ -119,11 +119,11 @@ Test names start with the ID, e.g. `it("TC-CMD-HELP-2: ...")`.
 
 ### Vitest
 
-- **TC-CMD-HELP-1** (Vitest) [CMD-HELP] Given `HELP_INTRO` and `HELP_SECTIONS` rendered to plain text (intro, blank line, then each section: heading, its `- name: description` lines, a blank line between sections), then it equals the code block under `### help — CMD-HELP` in `docs/product-requirements.md`, character for character.
+- **TC-CMD-HELP-1** (Vitest) [CMD-HELP] Given `HELP_INTRO` and `HELP_SECTIONS` rendered to plain text (intro, blank line, then each section: heading, its command lines, a blank line between sections), then it equals the code block under `### help — CMD-HELP` in `docs/product-requirements.md`, character for character.
 - **TC-CMD-HELP-2** (Vitest) [CMD-HELP] Given the registry `commands`, then the set of names in `HELP_SECTIONS` equals the set of registry names, and no name appears twice.
 
 ### Storybook interaction tests (`src/commands/help/Help.stories.tsx`, real `Terminal`)
 
 - **TC-CMD-HELP-3** (Storybook) [CMD-HELP] When `help` is submitted, then the entry output's `innerText`, with trailing whitespace trimmed per line, equals the PRD block. Two `help` runs give two identical outputs.
-- **TC-CMD-HELP-4** (Storybook) [CMD-HELP] Given the dark theme, when `help` is submitted, then the three `help-heading` elements read `About me`, `Utilities`, `Typical terminal commands` and their color is `primary` (`rgb(143, 255, 224)`); a `- about: …` line and the intro line are `fg` (`rgb(211, 233, 230)`). The output contains three lists (`role="list"`) with 8, 1 and 4 items.
-- **TC-CMD-HELP-5** (Storybook) [NFR-MOBILE-1] Given 375px, when `help` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth`, and the `- projects: …` item is taller than one row (it wrapped) while the `- pwd: …` item is one row; the a11y addon reports no violations.
+- **TC-CMD-HELP-4** (Storybook) [CMD-HELP] Given the dark theme, when `help` is submitted, then the three `help-heading` elements read `ABOUT ME`, `UTILITIES`, `TERMINAL` and their color is `primary` (`rgb(143, 255, 224)`); the `about` line and the intro line are `fg` (`rgb(211, 233, 230)`). The output contains three lists (`role="list"`) with 8, 1 and 4 items.
+- **TC-CMD-HELP-5** (Storybook) [NFR-MOBILE-1] Given 375px, when `help` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth`, and the `resume` item is taller than one row (it wrapped) while the `email` item is one row; the a11y addon reports no violations.

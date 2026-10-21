@@ -116,31 +116,31 @@ The address is printed so visitors without a mail client can still copy it.
 
 ### help — CMD-HELP
 
-The section headings (`About me`, `Utilities`, `Typical terminal commands`) are in `primary`; every other line is `fg`.
+The section headings (`ABOUT ME`, `UTILITIES`, `TERMINAL`) are in `primary`; every other line is `fg`.
 
 **Print**
 
 ```
-These are all available commands in this terminal.
+Available commands in this terminal
 
-About me
-- about: want to know more about me?
-- education: my education background
-- email: send an email to me
-- projects: view all work that I have participated in
-- resume: download my resume
-- connect: check out my social accounts
-- themes: check available themes
-- welcome: display hero section
+ABOUT ME
+  about       Curious about me? Take a peek
+  education   Where I earned my brainpower
+  email       Shoot me an email
+  projects    See what I've been cooking
+  resume      My career highlights, minus all the embarrassing bits
+  connect     Let's be internet friends
+  themes      Change the vibe
+  welcome     Back to square one
 
-Utilities
-- help: list all available commands
+UTILITIES
+  help        List all available commands
 
-Typical terminal commands
-- clear: clear the terminal
-- history: view command history
-- pwd: print current working directory
-- whoami: people who want to be my friend
+TERMINAL
+  clear       Clear the terminal
+  history     View command history
+  pwd         Print current working directory
+  whoami      A stranger, for now
 ```
 
 ### history — CMD-HISTORY
