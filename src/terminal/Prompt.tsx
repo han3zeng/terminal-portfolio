@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export const PROMPT = "visitor@han3zeng:~$";
+export const PROMPT = "strangerfornow@han3zeng:~$";
 
 type Props = { children: ReactNode; "data-testid"?: string };
 

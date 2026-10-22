@@ -85,7 +85,7 @@ e.g. themes set matrix
 | Part                                                   | Token                    |
 | ------------------------------------------------------ | ------------------------ |
 | Page background                                        | `bg`                     |
-| Prompt `visitor@han3zeng:~$` and the narrow `>` marker | `primary`                |
+| Prompt `strangerfornow@han3zeng:~$` and the narrow `>` marker | `primary`                |
 | Block cursor, solid and hollow                         | `primary`                |
 | Past command text, all output text                     | `fg` (inherited)         |
 | Tab hints                                              | `muted`                  |

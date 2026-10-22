@@ -22,7 +22,7 @@ These reference-site features are intentionally **not** included:
 - **UI-LAYOUT-1** The whole screen is a terminal window. No desktop background; the page should feel immersive, like using a terminal. No visible frame or border. When output is taller than the screen, the whole page scrolls.
 - **UI-LAYOUT-2** On first load, the terminal runs `welcome` automatically. Typing `welcome` later prints the same output again.
 - **UI-LAYOUT-3** The input line stays below the latest output. When new output is added, the terminal scrolls to the bottom.
-- **UI-PROMPT-1** Every input line and every past command line is prefixed with the prompt `visitor@han3zeng:~$`. At viewport width < 768px, the prompt is on its own line and the input (or past command) is on the next line, prefixed with `>`. The input stays a single line and scrolls horizontally inside itself.
+- **UI-PROMPT-1** Every input line and every past command line is prefixed with the prompt `strangerfornow@han3zeng:~$`. At viewport width < 768px, the prompt is on its own line and the input (or past command) is on the next line, prefixed with `>`. The input stays a single line and scrolls horizontally inside itself.
 - **UI-FONT-1** JetBrains Mono is used everywhere, with a 16px base size.
 
 ### Input behavior
@@ -358,7 +358,7 @@ Which part of the terminal uses which token:
 | Part                                                   | Token                    |
 | ------------------------------------------------------ | ------------------------ |
 | Page background                                        | `bg`                     |
-| Prompt `visitor@han3zeng:~$` and the narrow `>` marker | `primary`                |
+| Prompt `strangerfornow@han3zeng:~$` and the narrow `>` marker | `primary`                |
 | Block cursor (solid and hollow)                        | `primary`                |
 | Past command text and command output                   | `fg`                     |
 | Tab hints                                              | `muted`                  |

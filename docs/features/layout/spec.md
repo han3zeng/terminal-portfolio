@@ -83,10 +83,10 @@ The exported `out/index.html` contains:
 All three are drawn at build time with `ImageResponse` from `next/og`, in the dark palette, with square corners and no gradients.
 
 - **OG image**, 1200×630 PNG: `bg` background, 64px padding, JetBrains Mono. From top to bottom:
-  1. `visitor@han3zeng:~$ welcome` in `primary`.
+  1. `strangerfornow@han3zeng:~$ welcome` in `primary`.
   2. The **wide** banner from CMD-WELCOME (the five `HAN ZENG` lines), in `fg`, `white-space: pre`, sized so it fits the width.
   3. `Welcome to my terminal!` in `fg`.
-  4. `visitor@han3zeng:~$ █` in `primary`.
+  4. `strangerfornow@han3zeng:~$ █` in `primary`.
 - **Icon**, 32×32 PNG: `>_` in `primary` on `bg`, bold, centered.
 - **Apple icon**, 180×180 PNG: the same design at 180×180.
 

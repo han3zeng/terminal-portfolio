@@ -20,7 +20,7 @@ Out of scope (each has its own feature): what each command prints (`cmd-*`), the
 
 ### Prompt (UI-PROMPT-1)
 
-- Exact prompt text: `visitor@han3zeng:~$`, followed by one space.
+- Exact prompt text: `strangerfornow@han3zeng:~$`, followed by one space.
 - The same prompt is shown before the live input and before every past entry's command.
 - **Viewport ≥ 768px**: the prompt and the input (or the past command) are on one line.
 - **Viewport < 768px** (Han's decision: follow the reference): the prompt is on its own line. The next line starts with `>` and a space, followed by the input (or the past command). Past entries use the same two-line layout. The input is a single line. Text longer than the line scrolls sideways inside the input, never the page (NFR-MOBILE-1).
@@ -101,7 +101,7 @@ Shortcuts use the Ctrl key on every platform, including macOS. Cmd (Meta) combin
 
 | Behavior                                     | Reference (observed)                                                                                                                                                                                       | This spec                                                        | Class                     |
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ------------------------- |
-| Prompt text                                  | `visitor@terminal.satnaing.dev:~$`                                                                                                                                                                         | `visitor@han3zeng:~$`                                            | Differs (PRD wins)        |
+| Prompt text                                  | `visitor@terminal.satnaing.dev:~$`                                                                                                                                                                         | `strangerfornow@han3zeng:~$`                                            | Differs (PRD wins)        |
 | Narrow-screen prompt                         | prompt, line break, then `>` below 550px (two lines at 549px, one line at 550px)                                                                                                                           | Same, but the breakpoint is 768px                                | Differs (breakpoint)      |
 | Matching                                     | `  pwd  ` runs `pwd`; `HELP` gives `command not found: HELP`                                                                                                                                               | Same                                                             | Same                      |
 | Arg splitting                                | `themes  set dark` (two spaces) prints `Usage: themes set <theme-name>`: splits on single spaces                                                                                                           | on whitespace runs                                               | Differs (Han)             |
@@ -138,7 +138,7 @@ src/terminal/
   complete.ts         complete()                         (pure)
   terminalReducer.ts  terminalReducer(), initialState()  (pure)
   Terminal.tsx        "use client"; wires the reducer, input, keyboard, focus, scroll
-  Prompt.tsx          `visitor@han3zeng:~$` + `>` line below 768px
+  Prompt.tsx          `strangerfornow@han3zeng:~$` + `>` line below 768px
   EntryView.tsx       prompt line + output for one entry
   CommandInput.tsx    invisible <input> over a mirror that draws the text + █ cursor
   *.test.ts           Vitest for the pure files
@@ -241,8 +241,8 @@ Test names start with the ID, e.g. `it("TC-TERMINAL-SHELL-3: ...")`. Stories use
 
 ### Storybook interaction tests (components)
 
-- **TC-TERMINAL-SHELL-14** (Storybook) [UI-LAYOUT-2, UI-PROMPT-1] Given the terminal on first render, then the only entry shows `visitor@han3zeng:~$ welcome` followed by the welcome output, and the input is focused and empty.
-- **TC-TERMINAL-SHELL-15** (Storybook) [INPUT-1, UI-PROMPT-1] When `about` is typed and Enter is pressed, then a new entry shows `visitor@han3zeng:~$ about` followed by the about output, and the input is empty.
+- **TC-TERMINAL-SHELL-14** (Storybook) [UI-LAYOUT-2, UI-PROMPT-1] Given the terminal on first render, then the only entry shows `strangerfornow@han3zeng:~$ welcome` followed by the welcome output, and the input is focused and empty.
+- **TC-TERMINAL-SHELL-15** (Storybook) [INPUT-1, UI-PROMPT-1] When `about` is typed and Enter is pressed, then a new entry shows `strangerfornow@han3zeng:~$ about` followed by the about output, and the input is empty.
 - **TC-TERMINAL-SHELL-16** (Storybook) [INPUT-2] When `"   "` is submitted, then a new entry shows only the prompt line: no output, no error.
 - **TC-TERMINAL-SHELL-17** (Storybook) [CMD-NOT-FOUND, INPUT-3] When `HELP` is submitted, the output is `command not found: HELP`. When `foo  bar` is submitted, the output is `command not found: foo  bar`, with both spaces kept.
 - **TC-TERMINAL-SHELL-18** (Storybook) [INPUT-4] When `about foo` is submitted, then the output is `Usage: about`. When `clear foo` is submitted, the output is `Usage: clear` and the earlier entries are still there.

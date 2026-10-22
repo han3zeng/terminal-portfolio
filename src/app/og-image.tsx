@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 import { OG_IMAGE } from "./metadata";
 import { DARK, jetbrainsMonoFonts } from "./og-font";
 
-const PROMPT = "visitor@han3zeng:~$";
+const PROMPT = "strangerfornow@han3zeng:~$";
 
 // The wide banner from CMD-WELCOME.
 const BANNER = [

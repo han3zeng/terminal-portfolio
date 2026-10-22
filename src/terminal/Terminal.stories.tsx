@@ -22,7 +22,7 @@ import type { CommandContext, CommandDef } from "./types";
 //   with data-state="solid" | "hollow"
 // - data-testid="terminal-hints": Tab hints, absent when there are none
 
-const PROMPT = "visitor@han3zeng:~$";
+const PROMPT = "strangerfornow@han3zeng:~$";
 
 // Fake registry, so these tests don't depend on what the real commands print.
 function fakeCommands(onFx: (ctx: CommandContext) => void): CommandDef[] {
