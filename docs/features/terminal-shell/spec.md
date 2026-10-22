@@ -192,6 +192,7 @@ type TerminalState = {
 
 - The `<input>` keeps focus, keyboard, IME and a11y. It is visually transparent (`color: transparent; caret-color: transparent`), and it sits on top of a mirror `<span>` with `white-space: pre` that renders `value.slice(0, caret)`, then `█` (or a hollow block when blurred), then `value.slice(caret)`.
 - The caret position is tracked from `selectionStart` on `input`, `select`, `keyup` and `click`, and after the Ctrl+A, Ctrl+K and ↑/↓ handlers set it with `setSelectionRange`.
+- A caret position set from code (submit, Ctrl+K, ↑/↓, Tab) is applied after the render that follows it, **even when the value did not change** (an empty Enter, Ctrl+K at the end, ↑ recalling the text already typed). It must never be left waiting and applied on a later keystroke. (Bug found by Han, 2026-10-22: after an empty Enter, typing `help` gave `elph`; TC 36–38.)
 - For a single line that is longer than its box (<768px), `CommandInput` keeps its own horizontal offset: after each change of value or caret it measures the cursor and shifts the mirror just enough to keep the cursor visible, then sets `input.scrollLeft` to the same offset so clicks land on the right character. The browser's own `input.scrollLeft` is not used as the source, because it doesn't update when the value is set from code.
 
 ### Responsive
@@ -265,7 +266,13 @@ Test names start with the ID, e.g. `it("TC-TERMINAL-SHELL-3: ...")`. Stories use
 - **TC-TERMINAL-SHELL-34** (Storybook) [INPUT-8] Given the terminal's server HTML (`renderToString`) in the page and its input focused **before** hydration (as `autofocus` does on load), when React hydrates it (`hydrateRoot`), then the cursor's `data-state` is `solid` without any further focus event. When the input is blurred, it becomes `hollow`.
 - **TC-TERMINAL-SHELL-35** (Storybook) [INPUT-7] Given `a` then `b` were submitted, when ↑ is pressed (input `b`), `x` is typed (input `bx`) and ↑ is pressed again, then the input is `a`. When ↓ is pressed, the input is `b`. When `x` is typed and Enter is pressed, then ↑ shows `bx` (the newest entry: submitting ended navigation).
 
+- **TC-TERMINAL-SHELL-36** (Storybook) [INPUT-2, INPUT-8] Given the input focused, when Enter is pressed on an empty input and `help` is typed, then the input is `help`. When `help` is then submitted and Enter is pressed three more times on the empty input, typing `pwd` gives `pwd`.
+- **TC-TERMINAL-SHELL-37** (Storybook) [INPUT-7, INPUT-8] Given `pwd` typed with the caret at the end, when Ctrl+K is pressed (nothing to delete) and `xy` is typed, then the input is `pwdxy`.
+- **TC-TERMINAL-SHELL-38** (Storybook) [INPUT-7, INPUT-8] Given `pwd` was submitted and `pwd` is typed, when ↑ is pressed (recalling the same text) and `xy` is typed, then the input is `pwdxy`.
+
 ### Test-tooling notes
+
+- TC 36–38 type with `userEvent.keyboard`, which types at the input's real caret. `userEvent.type` and `userEvent.clear` place the caret themselves, which hides caret bugs like this one.
 
 - TC-32 and TC-33 set the viewport with story `globals.viewport` and custom `parameters.viewport.options` (375, 767, 768 and 1024px). `@storybook/addon-vitest` applies them in browser mode by calling `page.viewport()` (see `vitest-plugin/test-utils.js`).
 - TC-27 is a proxy: story tests can't emulate media queries, so it walks `document.styleSheets` and checks that a `prefers-reduced-motion: reduce` rule sets `animation: none` on the cursor. This handles `@layer` and CSS nesting, so a Tailwind `motion-reduce:` variant or plain CSS both pass.
