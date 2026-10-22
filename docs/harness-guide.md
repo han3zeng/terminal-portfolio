@@ -56,6 +56,7 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 ### Step 7 — Reduce permission prompts (after a few sessions) ✅
 
 - [x] Run `/fewer-permission-prompts`: 15 read-only rules in `.claude/settings.json` (`pnpm lint`/`typecheck`/`test`/`spec:status`, `prettier --check`, the Playwright navigate/resize/screenshot/snapshot/close tools). Re-run after more sessions.
+- [x] Re-ran 2026-10-22: +5 rules (`pnpm test:unit`, `pnpm test:storybook`, each with and without args; `pnpm prettier --check *`). Most other frequent commands were already allowed or auto-allowed.
 
 ## Feature tracker
 
@@ -66,13 +67,13 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 | themes              | [x]  | [x]            | [x]  |
 | cmd-welcome         | [x]  | [x]            | [x]  |
 | cmd-help            | [x]  | [x]            | [x]  |
-| cmd-about           | [ ]  | [ ]            | [ ]  |
-| cmd-education       | [ ]  | [ ]            | [ ]  |
-| cmd-projects        | [ ]  | [ ]            | [ ]  |
+| cmd-about           | [x]  | [ ]            | [ ]  |
+| cmd-education       | [x]  | [ ]            | [ ]  |
+| cmd-projects        | [x]  | [ ]            | [ ]  |
 | cmd-connect         | [ ]  | [ ]            | [ ]  |
 | cmd-email           | [ ]  | [ ]            | [ ]  |
 | cmd-resume          | [ ]  | [ ]            | [ ]  |
-| cmd-history         | [ ]  | [ ]            | [ ]  |
+| cmd-history         | [x]  | [ ]            | [ ]  |
 | cmd-clear           | [x]  | [x]            | [x]  |
 | cmd-pwd, cmd-whoami | [x]  | [x]            | [x]  |
 

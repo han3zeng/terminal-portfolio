@@ -154,7 +154,7 @@ TERMINAL
 
 **Action**
 
-- Lists all projects. Each title is rendered in the accent color. URLs are clickable links that open in a new tab.
+- Lists all projects. Each title line, including its number (e.g. `1. Yahoo News and E-commerce`), is rendered in the accent color. URLs are clickable links that open in a new tab; they are accent and underlined, so they stand apart from titles (which are not underlined). Descriptions are `fg`.
 
 **Print**
 
