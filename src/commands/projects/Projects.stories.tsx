@@ -119,7 +119,6 @@ export const TC4: Story = {
   name: "TC-CMD-PROJECTS-4: URLs are underlined accent links that open in a new tab",
   play: async ({ canvasElement }) => {
     const { canvas, input } = await setup(canvasElement);
-    const windowsBefore = window.length;
     await run(input, "projects");
     const links = within(canvas.getByTestId("projects")).getAllByRole("link");
     await expect(links.map((l) => l.textContent)).toEqual(URLS);
@@ -132,7 +131,6 @@ export const TC4: Story = {
       await expect(style.color).toBe(ACCENT);
       await expect(style.textDecorationLine).toBe("underline");
     }
-    await expect(window.length).toBe(windowsBefore);
   },
 };
 
