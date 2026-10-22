@@ -1,4 +1,8 @@
+import { About } from "@/commands/about/About";
+import { Education } from "@/commands/education/Education";
 import { Help } from "@/commands/help/Help";
+import { History } from "@/commands/history/History";
+import { ProjectsOutput } from "@/commands/projects/ProjectsOutput";
 import { Pwd } from "@/commands/pwd/Pwd";
 import { Welcome } from "@/commands/welcome/Welcome";
 import { Whoami } from "@/commands/whoami/Whoami";
@@ -12,14 +16,14 @@ const Stub: CommandDef["Output"] = () => null;
 
 // Alphabetical: Tab hints are listed in registry order.
 export const commands: readonly CommandDef[] = [
-  { name: "about", takesArgs: false, Output: Stub },
+  { name: "about", takesArgs: false, Output: About },
   { name: "clear", takesArgs: false, Output: Stub, clearsScreen: true },
   { name: "connect", takesArgs: true, Output: Stub },
-  { name: "education", takesArgs: false, Output: Stub },
+  { name: "education", takesArgs: false, Output: Education },
   { name: "email", takesArgs: false, Output: Stub },
   { name: "help", takesArgs: false, Output: Help },
-  { name: "history", takesArgs: false, Output: Stub },
-  { name: "projects", takesArgs: false, Output: Stub },
+  { name: "history", takesArgs: false, Output: History },
+  { name: "projects", takesArgs: false, Output: ProjectsOutput },
   { name: "pwd", takesArgs: false, Output: Pwd },
   { name: "resume", takesArgs: false, Output: Stub },
   {
