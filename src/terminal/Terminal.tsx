@@ -63,6 +63,9 @@ export function Terminal({
     setCaret(nextCaret);
   };
 
+  // Runs after every render, not only when `value` changes: a caret set while the value
+  // stayed the same (empty Enter, Ctrl+K at the end) would otherwise wait and be applied
+  // on the next keystroke.
   useLayoutEffect(() => {
     const input = inputRef.current;
     if (!input) return;
@@ -70,7 +73,7 @@ export function Terminal({
       input.setSelectionRange(pendingCaret.current, pendingCaret.current);
       pendingCaret.current = null;
     }
-  }, [value]);
+  });
 
   // Keep the input line in view whenever entries change (UI-LAYOUT-3).
   const isFirstRender = useRef(true);
