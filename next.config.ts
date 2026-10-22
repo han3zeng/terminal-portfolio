@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
+import { BASE_PATH } from "./src/site";
+
 const nextConfig: NextConfig = {
-  // Fully static site, deployed to GitHub Pages at /terminal-portfolio
+  // Fully static site, deployed to GitHub Pages under BASE_PATH
   output: "export",
-  basePath: "/terminal-portfolio",
+  basePath: BASE_PATH,
   trailingSlash: true,
   images: { unoptimized: true },
   turbopack: {

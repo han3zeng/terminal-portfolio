@@ -24,11 +24,22 @@ const openUrl = (url: string) => {
   window.open(url, "_blank", "noopener,noreferrer");
 };
 
+const goTo = (url: string) => {
+  window.location.href = url;
+};
+
+const download = (url: string, filename: string) => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+};
+
 export type TerminalProps = {
   commands?: readonly CommandDef[];
   initialInput?: string;
   // Side effects for commands' onSubmit, merged over the defaults (next-themes' setTheme,
-  // window.open in a new tab); stories pass spies.
+  // window.open in a new tab, location navigation, <a download>); stories pass spies.
   effects?: Partial<CommandEffects>;
 };
 
@@ -107,7 +118,7 @@ export function Terminal({
       const def = commands.find((c) => c.name === resolution.name);
       def?.onSubmit?.(
         { args: resolution.args, history: [...state.history, raw] },
-        { setTheme, openUrl, ...effects },
+        { setTheme, openUrl, navigate: goTo, download, ...effects },
       );
     }
     dispatch({ type: "submit", raw, commands });

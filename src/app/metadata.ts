@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 
-export const SITE_URL = "https://han3zeng.github.io/terminal-portfolio/";
-// Same as `basePath` in next.config.ts. Metadata icon URLs don't get it added automatically.
-const BASE_PATH = "/terminal-portfolio";
+import { BASE_PATH, SITE_URL } from "@/site";
+
 export const TITLE = "Han Zeng — Terminal Portfolio";
 export const DESCRIPTION =
   "Terminal-style portfolio of Han Zeng, front-end engineer.";
@@ -38,6 +37,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
+        // Metadata icon URLs do not get the base path added automatically.
         url: `${BASE_PATH}/icon-32.png`,
         type: "image/png",
         sizes: "32x32",

@@ -10,6 +10,8 @@ export type CommandContext = {
 export type CommandEffects = {
   setTheme: (theme: string) => void;
   openUrl: (url: string) => void;
+  navigate: (url: string) => void;
+  download: (url: string, filename: string) => void;
 };
 
 export type CommandDef = {

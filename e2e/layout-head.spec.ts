@@ -5,12 +5,13 @@ import {
   type Page,
 } from "@playwright/test";
 
+import { BASE_PATH as SITE_BASE_PATH, SITE_URL } from "../src/site";
+
 // TC-LAYOUT-1 – 4: the head tags and SEO images of the real static export, which
-// playwright.config.ts builds and serves under /terminal-portfolio/.
+// playwright.config.ts builds and serves under BASE_PATH.
 // JavaScript is off, so the page is the static HTML exactly as shipped, before React runs.
 
-const SITE_URL = "https://han3zeng.github.io/terminal-portfolio/";
-const BASE_PATH = "/terminal-portfolio/";
+const BASE_PATH = `${SITE_BASE_PATH}/`;
 const TITLE = "Han Zeng — Terminal Portfolio";
 const DESCRIPTION = "Terminal-style portfolio of Han Zeng, front-end engineer.";
 
@@ -68,7 +69,7 @@ test.describe("layout: static export head", () => {
     const og = await meta(page, "og:image");
     expect(og).not.toBeNull();
     expect(og!.startsWith(SITE_URL)).toBe(true);
-    expect(og).not.toContain("/terminal-portfolio/terminal-portfolio");
+    expect(og).not.toContain(`${SITE_BASE_PATH}${SITE_BASE_PATH}`);
     expect(await meta(page, "twitter:image")).toBe(og);
     expect(await meta(page, "og:image:width")).toBe("1200");
     expect(await meta(page, "og:image:height")).toBe("630");

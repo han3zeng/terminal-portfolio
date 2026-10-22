@@ -115,7 +115,7 @@ Well, hey, you! Be my best friend!
 Shoot me an email, let's chat: hanyutseng.hyt@gmail.com
 ```
 
-The address is printed so visitors without a mail client can still copy it.
+The address is printed so visitors without a mail client can still copy it. It is also a `mailto:` link (`accent`, underlined), as a fallback when the automatic navigation does nothing. Every other line is `fg`.
 
 ### help — CMD-HELP
 
@@ -204,7 +204,8 @@ Selected projects
 
 **Action**
 
-- On submit, download `public/resume.pdf` (served as `<basePath>/resume.pdf`, see NFR-BUILD-2).
+- On submit, download `public/resume.pdf` (served as `<basePath>/resume.pdf`, see NFR-BUILD-2). The browser saves it as `Han-Zeng-Resume.pdf`; the page stays where it is.
+- The output has no link to the file.
 
 **Print**
 

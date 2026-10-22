@@ -2,10 +2,12 @@ import { About } from "@/commands/about/About";
 import { parseConnectArgs } from "@/commands/connect/connect";
 import { ConnectOutput } from "@/commands/connect/ConnectOutput";
 import { Education } from "@/commands/education/Education";
+import { EmailOutput } from "@/commands/email/EmailOutput";
 import { Help } from "@/commands/help/Help";
 import { History } from "@/commands/history/History";
 import { ProjectsOutput } from "@/commands/projects/ProjectsOutput";
 import { Pwd } from "@/commands/pwd/Pwd";
+import { ResumeOutput } from "@/commands/resume/ResumeOutput";
 import { Welcome } from "@/commands/welcome/Welcome";
 import { Whoami } from "@/commands/whoami/Whoami";
 import { parseThemesArgs } from "@/themes/parseThemesArgs";
@@ -30,12 +32,12 @@ export const commands: readonly CommandDef[] = [
     },
   },
   { name: "education", takesArgs: false, Output: Education },
-  { name: "email", takesArgs: false, Output: Stub },
+  { name: "email", takesArgs: false, Output: EmailOutput },
   { name: "help", takesArgs: false, Output: Help },
   { name: "history", takesArgs: false, Output: History },
   { name: "projects", takesArgs: false, Output: ProjectsOutput },
   { name: "pwd", takesArgs: false, Output: Pwd },
-  { name: "resume", takesArgs: false, Output: Stub },
+  { name: "resume", takesArgs: false, Output: ResumeOutput },
   {
     name: "themes",
     takesArgs: true,

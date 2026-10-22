@@ -52,6 +52,7 @@ Package manager: pnpm (never npm or yarn).
 - Theme colors are CSS variables per `[data-theme="..."]`, mapped to Tailwind tokens with `@theme`. Use semantic names from the PRD (`bg`, `fg`, `primary`, `accent`, …).
 - next-themes: `attribute="data-theme"`, `themes={['dark','light','matrix','ubuntu']}`, `enableSystem={false}`. Theme-dependent UI must handle the unmounted state to avoid hydration mismatch.
 - GitHub Pages serves the site under `/terminal-portfolio`. Files in `public/` (e.g. `resume.pdf`) must be linked with the base path; `next/link` adds it automatically; plain `<a href>` and string `src` paths do not.
+- The base path lives only in `src/site.ts` (`BASE_PATH`, `SITE_URL`). `next.config.ts`, `playwright.config.ts`, the app and tests import it; never write `/terminal-portfolio` as a string in code.
 - Static export: no API routes, server actions, middleware, or runtime `next/image` optimization. `next start` does not work; preview with any static server on `out/`.
 - ESLint 9 uses flat config (`eslint.config.mjs`). `eslint-config-prettier` must stay the last entry.
 - Storybook builds with Vite, not Turbopack: Tailwind is added through `@tailwindcss/vite` in `.storybook/main.ts`, and `next/font` CSS variables set in `layout.tsx` do not exist in stories unless added in `.storybook/preview.tsx`.
