@@ -67,21 +67,24 @@ I love to make impacts through coding.
 
 **Action**
 
-- `connect` prints the list below. Each URL is a clickable link that opens in a new tab.
+- `connect` prints the list below. Each URL is a clickable link that opens in a new tab; URLs are `accent` and underlined. The `USAGE` heading is `primary`; every other line is `fg`.
 - `connect go <n>` opens link n in a new tab and prints nothing else.
-- `connect go <n>` with n outside 1–3, or any other argument, prints the two usage lines only.
+- `connect go <n>` with n outside 1–3, or any other argument, prints only the `USAGE` block (heading and its two lines).
+- n is valid only when it is exactly `1`, `2` or `3` (`01`, `+1`, `1.0` print the `USAGE` block). An extra argument (`connect go 1 x`) prints the `USAGE` block and opens nothing.
+- Narrow screens: the text is the same at every width. A link row that is too long wraps with a hanging indent, so the URL continues under the URL column, not at the left edge.
 
 **Print**
 
 ```
 Let's connect!
 
-1. Substack   - https://substack.com/@han3zeng
-2. GitHub     - https://github.com/han3zeng
-3. LinkedIn   - https://www.linkedin.com/in/han3zeng
+  [1] Substack   https://substack.com/@han3zeng
+  [2] GitHub     https://github.com/han3zeng
+  [3] LinkedIn   https://www.linkedin.com/in/han3zeng
 
-Usage: connect go <social-no>
-eg: connect go 1
+USAGE
+  connect            list links
+  connect go <n>     open link <n> in a new tab
 ```
 
 ### education — CMD-EDUCATION
@@ -116,7 +119,7 @@ The address is printed so visitors without a mail client can still copy it.
 
 ### help — CMD-HELP
 
-The section headings (`ABOUT ME`, `UTILITIES`, `TERMINAL`) are in `primary`; every other line is `fg`.
+The section headings (`ABOUT ME`, `UTILITIES`, `TERMINAL`, `SHORTCUTS`) are in `primary`; every other line is `fg`.
 
 **Print**
 
@@ -141,6 +144,13 @@ TERMINAL
   history     View command history
   pwd         Print current working directory
   whoami      A stranger, for now
+
+SHORTCUTS
+  Tab         Autocomplete a command
+  ↑ / ↓       Browse command history
+  Ctrl+L      Clear the screen
+  Ctrl+A      Move cursor to start of line
+  Ctrl+K      Delete to end of line
 ```
 
 ### history — CMD-HISTORY
@@ -154,30 +164,32 @@ TERMINAL
 
 **Action**
 
-- Lists all projects. Each title line, including its number (e.g. `1. Yahoo News and E-commerce`), is rendered in the accent color. URLs are clickable links that open in a new tab; they are accent and underlined, so they stand apart from titles (which are not underlined). Descriptions are `fg`.
+- Lists all projects. Each title line, including its number (e.g. `[1] Yahoo News and E-commerce`), is rendered in the accent color. The URLs and descriptions under a title have a hanging indent: they line up with the title text, and lines that wrap on narrow screens keep that indent. URLs are clickable links that open in a new tab; they are accent and underlined, so they stand apart from titles (which are not underlined). Descriptions are `fg`.
 
 **Print**
 
 ```
-1. Yahoo News and E-commerce
-https://tw.yahoo.com
-https://tw.buy.yahoo.com
-Once, the most representative internet portal and index site in Taiwan.
-Yup, I know, once.
+Selected projects
 
-2. Recall Election: Live Results and News
-https://hanrecall.pts.org.tw/
-Once upon a time, a master of corny jokes became a city mayor in Taiwan.
-He was later recalled for making too many corny jokes.
+  [1] Yahoo News and E-commerce
+      https://tw.yahoo.com
+      https://tw.buy.yahoo.com
+      Once, the most representative internet portal and index site in Taiwan.
+      Yup, I know, once.
 
-3. PRO360
-https://www.pro360.com.tw
-What?! You've never heard of PRO360?
-Well, there's a saying among us employees: Thumbtack is our Figma.
+  [2] Recall Election: Live Results and News
+      https://hanrecall.pts.org.tw/
+      Once upon a time, a master of corny jokes became a city mayor in Taiwan.
+      He was later recalled for making too many corny jokes.
 
-4. TW Reporter
-https://www.twreporter.org/
-The non-profit digital news outlet in Taiwan, renowned for long-form investigative journalism.
+  [3] PRO360
+      https://www.pro360.com.tw
+      What?! You've never heard of PRO360?
+      Well, there's a saying among us employees: Thumbtack is our Figma.
+
+  [4] TW Reporter
+      https://www.twreporter.org/
+      The non-profit digital news outlet in Taiwan, renowned for long-form investigative journalism.
 ```
 
 ### pwd — CMD-PWD
@@ -205,9 +217,9 @@ I am looking forward to hearing from you.
 
 **Action**
 
-- `themes` lists all available themes and the usage below.
+- `themes` lists all available themes and the usage below. The `USAGE` heading is `primary`; every other line is `fg`.
 - `themes set <theme_name>` switches the page theme immediately and prints nothing.
-- `themes set <unknown>` or any other argument prints only the `## How to use` block (its three lines), not the theme list.
+- `themes set <unknown>` or any other argument prints only the `USAGE` block (heading and its three lines), not the theme list.
 - Theme names are case-sensitive: `themes set Ubuntu` prints the usage block.
 - The default theme on first visit is `dark`. The OS light/dark setting is ignored.
 - The chosen theme persists across page reloads.
@@ -215,11 +227,17 @@ I am looking forward to hearing from you.
 **Print**
 
 ```
-dark, light, matrix, ubuntu
+Available themes
 
-## How to use
-themes set [theme_name]
-e.g. themes set matrix
+  [1] dark
+  [2] light
+  [3] matrix
+  [4] ubuntu
+
+USAGE
+  themes                  list themes
+  themes set <name>       switch to theme <name>
+  e.g. themes set matrix
 ```
 
 ### welcome — CMD-WELCOME
@@ -355,16 +373,16 @@ The light theme's `primary`, `accent` and `muted` are the Solarized hues darkene
 
 Which part of the terminal uses which token:
 
-| Part                                                   | Token                    |
-| ------------------------------------------------------ | ------------------------ |
-| Page background                                        | `bg`                     |
+| Part                                                          | Token                    |
+| ------------------------------------------------------------- | ------------------------ |
+| Page background                                               | `bg`                     |
 | Prompt `strangerfornow@han3zeng:~$` and the narrow `>` marker | `primary`                |
-| Block cursor (solid and hollow)                        | `primary`                |
-| Past command text and command output                   | `fg`                     |
-| Tab hints                                              | `muted`                  |
-| Headings inside outputs (e.g. `## How to use`)         | `primary`                |
-| Links inside outputs                                   | `accent`                 |
-| Browser `theme-color` meta                             | the current theme's `bg` |
+| Block cursor (solid and hollow)                               | `primary`                |
+| Past command text and command output                          | `fg`                     |
+| Tab hints                                                     | `muted`                  |
+| Headings inside outputs (e.g. `USAGE`)                        | `primary`                |
+| Links inside outputs                                          | `accent`                 |
+| Browser `theme-color` meta                                    | the current theme's `bg` |
 
 Switching themes is instant (no color transition). On load, the saved theme is applied before the first paint, with no flash of another theme.
 

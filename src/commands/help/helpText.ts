@@ -11,6 +11,15 @@ export const HELP_INTRO = "Available commands in this terminal";
 export const helpLine = (name: string, description: string) =>
   `  ${name.padEnd(12)}${description}`;
 
+// The keyboard shortcuts (INPUT-7), in the same column layout. Kept out of HELP_SECTIONS,
+// which lists commands only (TC-CMD-HELP-2).
+export const HELP_SHORTCUTS: HelpSection = { heading: "SHORTCUTS", lines: [] };
+
+// The whole output as plain text: intro, then each section, a blank line between them.
+export function helpText(): string {
+  throw new Error("not implemented");
+}
+
 export const HELP_SECTIONS: HelpSection[] = [
   {
     heading: "ABOUT ME",

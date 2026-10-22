@@ -25,7 +25,14 @@ TERMINAL
   clear       Clear the terminal
   history     View command history
   pwd         Print current working directory
-  whoami      A stranger, for now`;
+  whoami      A stranger, for now
+
+SHORTCUTS
+  Tab         Autocomplete a command
+  ↑ / ↓       Browse command history
+  Ctrl+L      Clear the screen
+  Ctrl+A      Move cursor to start of line
+  Ctrl+K      Delete to end of line`;
 
 const VIEWPORTS = {
   w375: {
@@ -101,6 +108,7 @@ export const TC4: Story = {
       "ABOUT ME",
       "UTILITIES",
       "TERMINAL",
+      "SHORTCUTS",
     ]);
     for (const heading of headings) {
       await expect(getComputedStyle(heading).color).toBe("rgb(143, 255, 224)");
@@ -113,11 +121,14 @@ export const TC4: Story = {
     await expect(
       getComputedStyle(help.getByText(/^\s*about\s+Curious about me\?/)).color,
     ).toBe(FG);
+    await expect(
+      getComputedStyle(help.getByText(/^\s*Ctrl\+A\s+Move cursor/)).color,
+    ).toBe(FG);
 
     const lists = help.getAllByRole("list");
     await expect(
       lists.map((list) => within(list).getAllByRole("listitem").length),
-    ).toEqual([8, 1, 4]);
+    ).toEqual([8, 1, 4, 5]);
   },
 };
 

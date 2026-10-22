@@ -4,6 +4,8 @@ PRD: CMD-THEMES, Style → Theme colors, NFR-A11Y-3, INPUT-6 (for `themes set`).
 
 Reference studied: the live site https://terminal.satnaing.dev/ (2026-10-20, Playwright MCP, headless Chromium at 1280×800 and 375×700). Screenshots: `reference/ref-themes-1280.png`, `reference/ref-themes-375.png`, `reference/ref-ubuntu-1280.png`, `reference/ref-light-1280.png`.
 
+Revised 2026-10-22: the `themes` output moved to the shared man-page style (Han): an `Available themes` intro, one `[n]` theme per line, and a `USAGE` block replacing `## How to use`. The style is shared with `connect`, `projects` and `help`.
+
 ## Scope
 
 In scope: the four palettes, switching and persisting the theme (next-themes), the `themes` command (its output and its `themes set` side effect), which terminal parts get which color token, the `theme-color` meta following the theme, and contrast (NFR-A11Y-3).
@@ -61,23 +63,32 @@ Arguments are split as in terminal-shell (on whitespace runs). Theme names match
 Full output (`themes`), exactly:
 
 ```
-dark, light, matrix, ubuntu
+Available themes
 
-## How to use
-themes set [theme_name]
-e.g. themes set matrix
+  [1] dark
+  [2] light
+  [3] matrix
+  [4] ubuntu
+
+USAGE
+  themes                  list themes
+  themes set <name>       switch to theme <name>
+  e.g. themes set matrix
 ```
 
 Usage block only (bad arguments), exactly:
 
 ```
-## How to use
-themes set [theme_name]
-e.g. themes set matrix
+USAGE
+  themes                  list themes
+  themes set <name>       switch to theme <name>
+  e.g. themes set matrix
 ```
 
-- The list is in this fixed order, comma-separated, on one line. It does not mark the current theme.
-- `## How to use` is printed literally (with the `##`) in `primary`. The other lines are `fg`.
+- The list is in this fixed order, one theme per line as `  [n] name`. It does not mark the current theme.
+- The `[n]` numbers are labels only: `themes set 3` is an unknown name and prints the usage block.
+- A usage row is two spaces, the command padded to 24 characters, then the description; the example row is two spaces then `e.g. themes set matrix`.
+- `USAGE` is in `primary`. Every other line is `fg`.
 - The side effect follows INPUT-6: `setTheme` is called once, in the submit handler, only for a valid `themes set <name>`. Rendering, re-rendering, Ctrl+L or later submits never call it again.
 
 ### Colors of the terminal parts (Han's decision)
@@ -89,7 +100,7 @@ e.g. themes set matrix
 | Block cursor, solid and hollow                                | `primary`                |
 | Past command text, all output text                            | `fg` (inherited)         |
 | Tab hints                                                     | `muted`                  |
-| Headings inside outputs (e.g. `## How to use`)                | `primary`                |
+| Headings inside outputs (e.g. `USAGE`)                        | `primary`                |
 | Links inside outputs                                          | `accent`                 |
 | `<meta name="theme-color">`                                   | the current theme's `bg` |
 
@@ -101,7 +112,7 @@ e.g. themes set matrix
 | Behavior              | Reference (observed)                                                                                                                                                             | This spec                                        | Class              |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------ |
 | Theme names           | the reference's own six: `dark`, `light`, `blue-matrix` (a blue theme, unrelated to our green `matrix`), `espresso`, `green-goblin`, `ubuntu`                                    | `dark`, `light`, `matrix`, `ubuntu`              | Differs (PRD)      |
-| `themes` output       | the names as separate items (wrapping onto a second row at 375px), then `Usage: themes set <theme-name>` / `eg: themes set ubuntu` (`ref-themes-1280.png`, `ref-themes-375.png`) | comma list, blank line, `## How to use` block    | Differs (PRD)      |
+| `themes` output       | the names as separate items (wrapping onto a second row at 375px), then `Usage: themes set <theme-name>` / `eg: themes set ubuntu` (`ref-themes-1280.png`, `ref-themes-375.png`) | intro, one `[n]` theme per line, `USAGE` block   | Differs (PRD)      |
 | `themes set ubuntu`   | prints nothing, switches the theme                                                                                                                                               | Same                                             | Same               |
 | Bad arguments         | `themes set foo`, `themes set Ubuntu`, `themes set`, `themes foo`, `themes set dark extra` all print the two usage lines (not the list)                                          | the usage block only                             | Same (text: PRD)   |
 | Case                  | `themes set Ubuntu` → usage                                                                                                                                                      | Same                                             | Same               |
@@ -188,7 +199,7 @@ export const THEME_PROVIDER_PROPS = {
 ### Test hooks
 
 - Output text is checked through `innerText` of the entry output, so each output line must be its own block row and a blank line must render as one empty line: a row holding a non-breaking space (`<div>&nbsp;</div>`). An empty `<div>` collapses, and both `<div><br></div>` and a `<p>` add an extra blank line to `innerText`.
-- `ThemesOutput` renders the heading line with `data-testid="themes-usage-heading"` (it has no role of its own; a real heading element would add `##` text to the a11y outline, so it is a `<p>`).
+- `ThemesOutput` renders the `USAGE` line with `data-testid="themes-usage-heading"` (a styled `<div>`, not a heading element, so outputs from many runs don't flood the heading outline; same as `help`). The theme list and the usage rows are each a `<ul class="list-none">`; the leading spaces and padding are real text, so `innerText` equals the PRD.
 - `.storybook/preview.tsx` resets the theme before each story (`beforeEach`), so stories don't leak the theme into each other through `localStorage` or `data-theme`.
 
 ### Order of work
@@ -215,13 +226,13 @@ Test names start with the ID, e.g. `it("TC-THEMES-2: ...")`.
 
 ### Storybook interaction tests (`src/themes/Themes.stories.tsx`, real registry, real `Providers` from the preview)
 
-- **TC-THEMES-7** (Storybook) [CMD-THEMES] When `themes` is submitted, then the entry output's text lines are exactly `dark, light, matrix, ubuntu`, ``(blank), `## How to use`, `themes set [theme_name]`, `e.g. themes set matrix`, and the theme is unchanged (`dark`).
+- **TC-THEMES-7** (Storybook) [CMD-THEMES] When `themes` is submitted, then the entry output's `innerText`, with trailing whitespace trimmed per line, equals the full output block above (the PRD's `### themes — CMD-THEMES` block), and the theme is unchanged (`dark`).
 - **TC-THEMES-8** (Storybook) [CMD-THEMES] When `themes set ubuntu` is submitted, then the entry has no output, `<html>` has `data-theme="ubuntu"`, `body`'s background is `rgb(48, 10, 36)` right away (no waiting), `body`'s computed `transition-duration` is `0s`, and `localStorage.getItem("theme")` is `"ubuntu"`. Then `themes set light` switches to light (`rgb(253, 246, 227)`), `themes set matrix` to matrix, `themes set dark` back to dark.
-- **TC-THEMES-9** (Storybook) [CMD-THEMES] When `themes set foo`, `themes set Ubuntu`, `themes set` and `themes foo` are submitted, then each output is exactly the three lines `## How to use`, `themes set [theme_name]`, `e.g. themes set matrix`, and `data-theme` stays `dark`.
+- **TC-THEMES-9** (Storybook) [CMD-THEMES] When `themes set foo`, `themes set Ubuntu`, `themes set` and `themes foo` are submitted, and `themes set 3`, then each output is exactly the four-line usage block (`USAGE`, `  themes                  list themes`, `  themes set <name>       switch to theme <name>`, `  e.g. themes set matrix`), and `data-theme` stays `dark`.
 - **TC-THEMES-10** (Storybook) [INPUT-6] Given a `Terminal` with an `effects.setTheme` spy, when `themes set matrix` is submitted, then the spy was called once with `"matrix"`. When `pwd` is submitted, Ctrl+L is pressed and `themes` and `themes set foo` are submitted, then the spy has still been called once.
 - **TC-THEMES-11** (Storybook) [CMD-THEMES] Given `localStorage["theme"] = "matrix"` before the story renders (a story-level `beforeEach`), then `<html>` has `data-theme="matrix"` and `body`'s background is `rgb(5, 11, 6)`. (Stands in for a reload.)
 - **TC-THEMES-12** (Storybook) [CMD-THEMES] Given empty storage, then `data-theme` is `dark`. Given `localStorage["theme"] = "not-a-theme"` (unknown), then `data-theme` is `dark`.
-- **TC-THEMES-13** (Storybook) [Theme colors] Given the light theme and `pwd` submitted, `h` typed and Tab pressed, and a fake command printing a link: then the prompt and the narrow marker's color is `primary` (`rgb(32, 116, 175)`), the cursor's color is `primary`, the hints' color is `muted` (`rgb(94, 115, 122)`), the past command text's color is `fg` (`rgb(88, 110, 117)`), the link's color is `accent` (`rgb(32, 123, 116)`), and in `themes` output the `## How to use` line is `primary`.
+- **TC-THEMES-13** (Storybook) [Theme colors] Given the light theme and `pwd` submitted, `h` typed and Tab pressed, and a fake command printing a link: then the prompt and the narrow marker's color is `primary` (`rgb(32, 116, 175)`), the cursor's color is `primary`, the hints' color is `muted` (`rgb(94, 115, 122)`), the past command text's color is `fg` (`rgb(88, 110, 117)`), the link's color is `accent` (`rgb(32, 123, 116)`), and in `themes` output the `USAGE` line is `primary` and the `[1] dark` line is `fg`.
 - **TC-THEMES-14** (Storybook) [Theme colors] Given a `<meta name="theme-color">` in the document, when `themes set ubuntu` is submitted, then its `content` is `#300A24`; after `themes set light` it is `#FDF6E3`.
 - **TC-THEMES-15** (Storybook) [NFR-A11Y-3] For each theme (four stories, `parameters.a11y.test: "error"`): given that theme, with `themes` and `nope` submitted and Tab hints showing, then the a11y addon (axe, including `color-contrast`) reports no violations.
 

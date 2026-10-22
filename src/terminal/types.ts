@@ -7,7 +7,10 @@ export type CommandContext = {
 };
 
 // Side effects a command's onSubmit may perform (passed in by Terminal, so stories can spy on them).
-export type CommandEffects = { setTheme: (theme: string) => void };
+export type CommandEffects = {
+  setTheme: (theme: string) => void;
+  openUrl: (url: string) => void;
+};
 
 export type CommandDef = {
   name: string;

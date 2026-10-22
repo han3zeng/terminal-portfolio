@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { commands } from "@/terminal/commands";
 
-import { HELP_INTRO, HELP_SECTIONS, helpLine } from "./helpText";
+import { HELP_SECTIONS, helpText } from "./helpText";
 
 // The code block under `### help — CMD-HELP` in the PRD.
 function prdHelpBlock(): string {
@@ -20,20 +20,9 @@ function prdHelpBlock(): string {
   return match[1].replace(/\n$/, "");
 }
 
-const renderText = () =>
-  [
-    HELP_INTRO,
-    ...HELP_SECTIONS.map((section) =>
-      [
-        section.heading,
-        ...section.lines.map((l) => helpLine(l.name, l.description)),
-      ].join("\n"),
-    ),
-  ].join("\n\n");
-
 describe("help text", () => {
-  it("TC-CMD-HELP-1: the intro and sections render to exactly the PRD's block", () => {
-    expect(renderText()).toBe(prdHelpBlock());
+  it("TC-CMD-HELP-1: the intro, command sections and shortcuts render to exactly the PRD's block", () => {
+    expect(helpText()).toBe(prdHelpBlock());
   });
 
   it("TC-CMD-HELP-2: help lists every registered command exactly once, and nothing else", () => {

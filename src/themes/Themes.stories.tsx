@@ -16,9 +16,9 @@ import type { CommandDef, CommandEffects } from "@/terminal/types";
 // which also resets the theme before each story). A story that needs a saved theme sets it
 // in its own beforeEach, which runs after the preview's reset (loaders run too early).
 //
-// Test hooks: entry-output (terminal-shell), themes-usage-heading (the `## How to use` line).
+// Test hooks: entry-output (terminal-shell), themes-usage-heading (the `USAGE` line).
 
-type Args = { effects?: CommandEffects; extraCommands?: CommandDef[] };
+type Args = { effects?: Partial<CommandEffects>; extraCommands?: CommandDef[] };
 
 const meta = {
   title: "themes/Themes",
@@ -30,14 +30,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// The PRD's CMD-THEMES block.
 const FULL_OUTPUT = [
-  "dark, light, matrix, ubuntu",
+  "Available themes",
   "",
-  "## How to use",
-  "themes set [theme_name]",
-  "e.g. themes set matrix",
+  "  [1] dark",
+  "  [2] light",
+  "  [3] matrix",
+  "  [4] ubuntu",
+  "",
+  "USAGE",
+  "  themes                  list themes",
+  "  themes set <name>       switch to theme <name>",
+  "  e.g. themes set matrix",
 ];
-const USAGE_OUTPUT = FULL_OUTPUT.slice(2);
+const USAGE_OUTPUT = FULL_OUTPUT.slice(7);
 
 const BG = {
   dark: "rgb(9, 19, 33)",
@@ -130,6 +137,7 @@ export const TC9: Story = {
       "themes set Ubuntu",
       "themes set",
       "themes foo",
+      "themes set 3",
     ]) {
       await run(input, text);
       await expect({ text, lines: outputLines(canvas) }).toEqual({
@@ -146,7 +154,7 @@ export const TC10: Story = {
   args: { effects: { setTheme: fn() } },
   play: async ({ args, canvasElement }) => {
     const { input } = await setup(canvasElement);
-    const setTheme = args.effects!.setTheme;
+    const setTheme = args.effects!.setTheme!;
 
     await run(input, "themes set matrix");
     await expect(setTheme).toHaveBeenCalledTimes(1);
@@ -224,9 +232,11 @@ export const TC13: Story = {
     ).toBe(ACCENT);
 
     await run(input, "themes");
-    await expect(
-      color(within(lastEntry(canvas)).getByTestId("themes-usage-heading")),
-    ).toBe(PRIMARY);
+    const themesOutput = within(lastEntry(canvas));
+    await expect(color(themesOutput.getByTestId("themes-usage-heading"))).toBe(
+      PRIMARY,
+    );
+    await expect(color(themesOutput.getByText("[1] dark"))).toBe(FG);
 
     await userEvent.type(input, "h");
     await userEvent.keyboard("{Tab}");

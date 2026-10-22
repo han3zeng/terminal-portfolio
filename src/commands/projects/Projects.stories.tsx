@@ -6,25 +6,27 @@ import { Terminal } from "@/terminal/Terminal";
 // Test hooks (cmd-projects spec): projects (output root), project-title (each title line).
 // The expected text is the PRD's CMD-PROJECTS block, copied here because stories run in the browser.
 
-const PRD_OUTPUT = `1. Yahoo News and E-commerce
-https://tw.yahoo.com
-https://tw.buy.yahoo.com
-Once, the most representative internet portal and index site in Taiwan.
-Yup, I know, once.
+const PRD_OUTPUT = `Selected projects
 
-2. Recall Election: Live Results and News
-https://hanrecall.pts.org.tw/
-Once upon a time, a master of corny jokes became a city mayor in Taiwan.
-He was later recalled for making too many corny jokes.
+  [1] Yahoo News and E-commerce
+      https://tw.yahoo.com
+      https://tw.buy.yahoo.com
+      Once, the most representative internet portal and index site in Taiwan.
+      Yup, I know, once.
 
-3. PRO360
-https://www.pro360.com.tw
-What?! You've never heard of PRO360?
-Well, there's a saying among us employees: Thumbtack is our Figma.
+  [2] Recall Election: Live Results and News
+      https://hanrecall.pts.org.tw/
+      Once upon a time, a master of corny jokes became a city mayor in Taiwan.
+      He was later recalled for making too many corny jokes.
 
-4. TW Reporter
-https://www.twreporter.org/
-The non-profit digital news outlet in Taiwan, renowned for long-form investigative journalism.`;
+  [3] PRO360
+      https://www.pro360.com.tw
+      What?! You've never heard of PRO360?
+      Well, there's a saying among us employees: Thumbtack is our Figma.
+
+  [4] TW Reporter
+      https://www.twreporter.org/
+      The non-profit digital news outlet in Taiwan, renowned for long-form investigative journalism.`;
 
 const URLS = [
   "https://tw.yahoo.com",
@@ -92,17 +94,17 @@ export const TC2: Story = {
 };
 
 export const TC3: Story = {
-  name: "TC-CMD-PROJECTS-3: titles are accent and not underlined; descriptions are fg",
+  name: "TC-CMD-PROJECTS-3: titles are accent and not underlined; the intro and descriptions are fg",
   play: async ({ canvasElement }) => {
     const { canvas, input } = await setup(canvasElement);
     await run(input, "projects");
     const projects = within(canvas.getByTestId("projects"));
     const titles = projects.getAllByTestId("project-title");
-    await expect(titles.map((t) => t.textContent)).toEqual([
-      "1. Yahoo News and E-commerce",
-      "2. Recall Election: Live Results and News",
-      "3. PRO360",
-      "4. TW Reporter",
+    await expect(titles.map((t) => t.textContent?.trim())).toEqual([
+      "[1] Yahoo News and E-commerce",
+      "[2] Recall Election: Live Results and News",
+      "[3] PRO360",
+      "[4] TW Reporter",
     ]);
     for (const title of titles) {
       const style = getComputedStyle(title);
@@ -111,6 +113,9 @@ export const TC3: Story = {
     }
     await expect(
       getComputedStyle(projects.getByText("Yup, I know, once.")).color,
+    ).toBe(FG);
+    await expect(
+      getComputedStyle(projects.getByText("Selected projects")).color,
     ).toBe(FG);
   },
 };
@@ -144,5 +149,46 @@ export const TC5: Story = {
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
       window.innerWidth,
     );
+  },
+};
+
+// Left edge of each visual row of a line's text after its 6 leading spaces.
+function rowLefts(line: HTMLElement): number[] {
+  const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
+  const node = walker.nextNode()!;
+  const range = document.createRange();
+  range.setStart(node, 6);
+  range.setEnd(node, node.textContent!.length);
+  const byTop = new Map<number, number>();
+  for (const r of range.getClientRects()) {
+    if (r.width === 0) continue;
+    const top = Math.round(r.top);
+    byTop.set(top, Math.min(byTop.get(top) ?? Infinity, r.left));
+  }
+  return [...byTop.entries()].sort((a, b) => a[0] - b[0]).map(([, l]) => l);
+}
+
+export const TC6: Story = {
+  name: "TC-CMD-PROJECTS-6: at 375px wrapped lines keep a 6-character hanging indent",
+  globals: { viewport: { value: "w375", isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const { canvas, input } = await setup(canvasElement);
+    await run(input, "projects");
+    const projects = within(canvas.getByTestId("projects"));
+    const lines = [
+      projects.getByText(/^\s*The non-profit digital news outlet/),
+      projects.getAllByTestId("project-title")[1],
+    ];
+    for (const line of lines) {
+      const lineHeight = parseFloat(getComputedStyle(line).lineHeight);
+      await expect(line.getBoundingClientRect().height).toBeGreaterThan(
+        lineHeight * 1.5,
+      );
+      const lefts = rowLefts(line);
+      await expect(lefts.length).toBeGreaterThan(1);
+      for (const left of lefts.slice(1)) {
+        await expect(Math.abs(left - lefts[0])).toBeLessThanOrEqual(1);
+      }
+    }
   },
 };

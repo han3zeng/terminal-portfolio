@@ -1,4 +1,5 @@
 import { About } from "@/commands/about/About";
+import { ConnectOutput } from "@/commands/connect/ConnectOutput";
 import { Education } from "@/commands/education/Education";
 import { Help } from "@/commands/help/Help";
 import { History } from "@/commands/history/History";
@@ -18,7 +19,7 @@ const Stub: CommandDef["Output"] = () => null;
 export const commands: readonly CommandDef[] = [
   { name: "about", takesArgs: false, Output: About },
   { name: "clear", takesArgs: false, Output: Stub, clearsScreen: true },
-  { name: "connect", takesArgs: true, Output: Stub },
+  { name: "connect", takesArgs: true, Output: ConnectOutput },
   { name: "education", takesArgs: false, Output: Education },
   { name: "email", takesArgs: false, Output: Stub },
   { name: "help", takesArgs: false, Output: Help },

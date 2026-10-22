@@ -20,11 +20,16 @@ import { resolve } from "./resolve";
 import { historyValue, initialState, terminalReducer } from "./terminalReducer";
 import type { CommandDef, CommandEffects } from "./types";
 
+const openUrl = (url: string) => {
+  window.open(url, "_blank", "noopener,noreferrer");
+};
+
 export type TerminalProps = {
   commands?: readonly CommandDef[];
   initialInput?: string;
-  // Side effects for commands' onSubmit. Defaults to next-themes' setTheme; stories pass spies.
-  effects?: CommandEffects;
+  // Side effects for commands' onSubmit, merged over the defaults (next-themes' setTheme,
+  // window.open in a new tab); stories pass spies.
+  effects?: Partial<CommandEffects>;
 };
 
 export function Terminal({
@@ -99,7 +104,7 @@ export function Terminal({
       const def = commands.find((c) => c.name === resolution.name);
       def?.onSubmit?.(
         { args: resolution.args, history: [...state.history, raw] },
-        effects ?? { setTheme },
+        { setTheme, openUrl, ...effects },
       );
     }
     dispatch({ type: "submit", raw, commands });

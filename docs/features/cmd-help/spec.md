@@ -4,6 +4,8 @@ PRD: CMD-HELP, INPUT-4 (`help` takes no arguments).
 
 Reference studied: the live site https://terminal.satnaing.dev/ (2026-10-20, Playwright MCP, headless Chromium at 1280×800 and 375×800). Screenshots: `reference/ref-help-1280.png`, `reference/ref-help-375.png`.
 
+Revised 2026-10-22: a fourth section, `SHORTCUTS`, lists the keyboard shortcuts (Han). It is part of the shared man-page style with `connect`, `themes` and `projects`.
+
 ## Scope
 
 In scope: the `help` command's output component: its exact text, its sections, colors and wrapping, and a guard that it stays in sync with the command registry.
@@ -14,7 +16,7 @@ Out of scope: argument handling (`help foo` → `Usage: help`, terminal-shell, d
 
 ### Output (CMD-HELP)
 
-Exactly the PRD's block (17 non-blank lines and 3 blank lines; no trailing spaces). Each command line is two spaces, the name padded with spaces to 12 characters, then the description:
+Exactly the PRD's block (23 non-blank lines and 4 blank lines; no trailing spaces). Each command or shortcut line is two spaces, the name (or key) padded with spaces to 12 characters, then the description:
 
 ```
 Available commands in this terminal
@@ -37,15 +39,23 @@ TERMINAL
   history     View command history
   pwd         Print current working directory
   whoami      A stranger, for now
+
+SHORTCUTS
+  Tab         Autocomplete a command
+  ↑ / ↓       Browse command history
+  Ctrl+L      Clear the screen
+  Ctrl+A      Move cursor to start of line
+  Ctrl+K      Delete to end of line
 ```
 
 - The order of sections and of lines inside them is the PRD's (not alphabetical, not registry order).
-- Every one of the 13 registered commands appears exactly once, and no other name does. If a command is added to or removed from the registry without updating `help`, TC-CMD-HELP-2 fails.
+- Every one of the 13 registered commands appears exactly once in the three command sections, and no other name does. If a command is added to or removed from the registry without updating `help`, TC-CMD-HELP-2 fails. `SHORTCUTS` lines are keys, not commands, and are not part of that check.
+- `SHORTCUTS` lists exactly the shortcuts terminal-shell implements (INPUT-7): Tab, ↑/↓, Ctrl+L, Ctrl+A, Ctrl+K. Shortcuts are written `Ctrl+X` on every platform, since the Ctrl key is used on macOS too (INPUT-7).
 - `help foo` prints `Usage: help` (terminal-shell).
 
 ### Colors (Han's decision)
 
-- The three section headings `ABOUT ME`, `UTILITIES`, `TERMINAL` are in `primary`.
+- The four section headings `ABOUT ME`, `UTILITIES`, `TERMINAL`, `SHORTCUTS` are in `primary`.
 - Everything else (the first line and every command line) is in `fg`.
 
 ### Wrapping (NFR-MOBILE-1)
@@ -58,13 +68,13 @@ TERMINAL
 
 ### Reference vs PRD
 
-| Behavior       | Reference (observed)                                                                                                                                 | This spec                                  | Class         |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ------------- |
-| Content        | one alphabetical list of 14 commands as `name - description`, names padded to a column, plus three keyboard-shortcut lines (`Tab or Ctrl + i  => …`) | the PRD's text: intro line, three sections | Differs (PRD) |
-| Shortcut lines | listed after the commands                                                                                                                            | not listed                                 | Differs (PRD) |
-| Colors         | command names in the host color (dark: `rgb(5, 206, 145)`), descriptions in a dimmer text color (`rgb(178, 189, 204)`)                               | headings `primary`, all lines `fg`         | Differs (Han) |
-| 375px          | name and description on two rows each (`ref-help-375.png`)                                                                                           | one line each, wrapping only when too long | Differs (PRD) |
-| `help me`      | `Usage: help`                                                                                                                                        | Same (terminal-shell)                      | Same          |
+| Behavior       | Reference (observed)                                                                                                                                 | This spec                                                                   | Class         |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------- |
+| Content        | one alphabetical list of 14 commands as `name - description`, names padded to a column, plus three keyboard-shortcut lines (`Tab or Ctrl + i  => …`) | the PRD's text: intro line, four sections                                   | Differs (PRD) |
+| Shortcut lines | listed after the commands, as `Tab or Ctrl + i  => …` lines with no heading                                                                          | a `SHORTCUTS` section with five lines in the same column layout as commands | Differs (PRD) |
+| Colors         | command names in the host color (dark: `rgb(5, 206, 145)`), descriptions in a dimmer text color (`rgb(178, 189, 204)`)                               | headings `primary`, all lines `fg`                                          | Differs (Han) |
+| 375px          | name and description on two rows each (`ref-help-375.png`)                                                                                           | one line each, wrapping only when too long                                  | Differs (PRD) |
+| `help me`      | `Usage: help`                                                                                                                                        | Same (terminal-shell)                                                       | Same          |
 
 ### Edge cases
 
@@ -77,7 +87,8 @@ TERMINAL
 
 ```
 src/commands/help/
-  helpText.ts           HELP_INTRO; HELP_SECTIONS: { heading: string; lines: { name: string; description: string }[] }[]
+  helpText.ts           HELP_INTRO; HELP_SECTIONS: { heading: string; lines: { name: string; description: string }[] }[] (the three command sections);
+                        HELP_SHORTCUTS: the same shape, heading "SHORTCUTS" (key in `name`); helpText(): the full PRD text
   Help.tsx              the Output component
   helpText.test.ts      Vitest
   Help.stories.tsx      Storybook interaction tests
@@ -85,6 +96,7 @@ src/terminal/commands.ts   help: { Output: Help }
 ```
 
 - Each line renders as `  ${name.padEnd(12)}${description}`.
+- `Help.tsx` renders `[...HELP_SECTIONS, HELP_SHORTCUTS]` with the same section markup. Keeping `HELP_SHORTCUTS` out of `HELP_SECTIONS` keeps TC-2's name check about commands only.
 
 ### Rendering
 
@@ -100,7 +112,7 @@ src/terminal/commands.ts   help: { Output: Help }
 
 ### Test hooks
 
-`help` (the output root), `help-heading` (each of the three headings).
+`help` (the output root), `help-heading` (each of the four headings).
 
 TC-3 compares the output's `innerText` with the PRD block, so each line is its own block row and a blank line renders as one empty line: a row holding a non-breaking space (`<div>&nbsp;</div>`; `<div><br></div>` counts as two lines). Use `<div>` rather than `<p>` for the intro and headings: a `<p>` adds an extra blank line to `innerText`, and an empty `<div>` collapses to nothing.
 
@@ -119,11 +131,11 @@ Test names start with the ID, e.g. `it("TC-CMD-HELP-2: ...")`.
 
 ### Vitest
 
-- **TC-CMD-HELP-1** (Vitest) [CMD-HELP] Given `HELP_INTRO` and `HELP_SECTIONS` rendered to plain text (intro, blank line, then each section: heading, its command lines, a blank line between sections), then it equals the code block under `### help — CMD-HELP` in `docs/product-requirements.md`, character for character.
+- **TC-CMD-HELP-1** (Vitest) [CMD-HELP] Given `HELP_INTRO`, `HELP_SECTIONS` and `HELP_SHORTCUTS` rendered to plain text by `helpText()` (intro, blank line, then each section: heading, its lines, a blank line between sections), then it equals the code block under `### help — CMD-HELP` in `docs/product-requirements.md`, character for character.
 - **TC-CMD-HELP-2** (Vitest) [CMD-HELP] Given the registry `commands`, then the set of names in `HELP_SECTIONS` equals the set of registry names, and no name appears twice.
 
 ### Storybook interaction tests (`src/commands/help/Help.stories.tsx`, real `Terminal`)
 
 - **TC-CMD-HELP-3** (Storybook) [CMD-HELP] When `help` is submitted, then the entry output's `innerText`, with trailing whitespace trimmed per line, equals the PRD block. Two `help` runs give two identical outputs.
-- **TC-CMD-HELP-4** (Storybook) [CMD-HELP] Given the dark theme, when `help` is submitted, then the three `help-heading` elements read `ABOUT ME`, `UTILITIES`, `TERMINAL` and their color is `primary` (`rgb(143, 255, 224)`); the `about` line and the intro line are `fg` (`rgb(211, 233, 230)`). The output contains three lists (`role="list"`) with 8, 1 and 4 items.
+- **TC-CMD-HELP-4** (Storybook) [CMD-HELP] Given the dark theme, when `help` is submitted, then the four `help-heading` elements read `ABOUT ME`, `UTILITIES`, `TERMINAL`, `SHORTCUTS` and their color is `primary` (`rgb(143, 255, 224)`); the `about` line, the `Ctrl+A` line and the intro line are `fg` (`rgb(211, 233, 230)`). The output contains four lists (`role="list"`) with 8, 1, 4 and 5 items.
 - **TC-CMD-HELP-5** (Storybook) [NFR-MOBILE-1] Given 375px, when `help` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth` and the a11y addon reports no violations.
