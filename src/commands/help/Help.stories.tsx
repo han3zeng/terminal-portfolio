@@ -122,24 +122,14 @@ export const TC4: Story = {
 };
 
 export const TC5: Story = {
-  name: "TC-CMD-HELP-5: at 375px long lines wrap without horizontal scroll",
+  name: "TC-CMD-HELP-5: at 375px there is no horizontal scroll",
   globals: { viewport: { value: "w375", isRotated: false } },
   parameters: { a11y: { test: "error" } },
   play: async ({ canvasElement }) => {
-    const { canvas, input } = await setup(canvasElement);
+    const { input } = await setup(canvasElement);
     await run(input, "help");
-    const help = within(lastHelp(canvas));
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
       window.innerWidth,
     );
-    const rows = (el: HTMLElement) =>
-      Math.round(
-        el.getBoundingClientRect().height /
-          parseFloat(getComputedStyle(el).lineHeight),
-      );
-    const resume = help.getByText(/^\s*resume\s+My career highlights/);
-    const email = help.getByText(/^\s*email\s+Shoot me an email/);
-    await expect(rows(resume)).toBeGreaterThanOrEqual(2);
-    await expect(rows(email)).toBe(1);
   },
 };

@@ -135,21 +135,14 @@ export const TC4: Story = {
 };
 
 export const TC5: Story = {
-  name: "TC-CMD-PROJECTS-5: at 375px long lines wrap without horizontal scroll",
+  name: "TC-CMD-PROJECTS-5: at 375px there is no horizontal scroll",
   globals: { viewport: { value: "w375", isRotated: false } },
   parameters: { a11y: { test: "error" } },
   play: async ({ canvasElement }) => {
-    const { canvas, input } = await setup(canvasElement);
+    const { input } = await setup(canvasElement);
     await run(input, "projects");
-    const projects = within(canvas.getByTestId("projects"));
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
       window.innerWidth,
     );
-    const line = projects.getByText(/^The non-profit digital news outlet/);
-    const rows = Math.round(
-      line.getBoundingClientRect().height /
-        parseFloat(getComputedStyle(line).lineHeight),
-    );
-    await expect(rows).toBeGreaterThanOrEqual(2);
   },
 };

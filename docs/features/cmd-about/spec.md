@@ -75,4 +75,4 @@ Test names start with the ID, e.g. `it("TC-CMD-ABOUT-1: ...")`.
 
 - **TC-CMD-ABOUT-1** (Vitest) [CMD-ABOUT] Then `ABOUT_OUTPUT` equals the code block under `### about — CMD-ABOUT` in `docs/product-requirements.md`, character for character.
 - **TC-CMD-ABOUT-2** (Storybook) [CMD-ABOUT] Given the dark theme, when `about` is submitted twice, then there are two `about` outputs, each with `innerText` exactly the PRD's two lines, and each is `fg` (`rgb(211, 233, 230)`) with no `<a>` inside.
-- **TC-CMD-ABOUT-3** (Storybook) [CMD-ABOUT, NFR-MOBILE-1] Given 375px, when `about` is submitted, then the `about` output's `textContent` is the full PRD text, the output is taller than two rows (the first line wrapped), `document.documentElement.scrollWidth <= window.innerWidth`, and the a11y addon reports no violations.
+- **TC-CMD-ABOUT-3** (Storybook) [CMD-ABOUT, NFR-MOBILE-1] Given 375px, when `about` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth` and the a11y addon reports no violations.

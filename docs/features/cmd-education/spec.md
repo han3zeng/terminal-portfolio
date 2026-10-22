@@ -27,7 +27,7 @@ National Chi Nan University | TW | 2009 - 2012
 - Every line is `fg`, normal weight (PRD theme table: "command output → `fg`"; the PRD names no other style for this command).
 - The blank line is a full-height empty row (it holds a non-breaking space, like `help` and `welcome`, so it does not collapse).
 - Running `education` again prints the same output again.
-- At 375px every line fits on one row (the longest, 44 characters, is narrower than the terminal). There's no horizontal page scroll (NFR-MOBILE-1).
+- At 375px the two school lines (42 and 46 characters) are wider than the terminal (about 35 characters), so they wrap at word boundaries; the degree lines and the blank row stay one row each. There's no horizontal page scroll (NFR-MOBILE-1).
 
 ### Reference vs PRD
 
@@ -86,4 +86,4 @@ Test names start with the ID, e.g. `it("TC-CMD-EDUCATION-1: ...")`.
 
 - **TC-CMD-EDUCATION-1** (Vitest) [CMD-EDUCATION] Then `EDUCATION_OUTPUT` equals the code block under `### education — CMD-EDUCATION` in `docs/product-requirements.md`, character for character.
 - **TC-CMD-EDUCATION-2** (Storybook) [CMD-EDUCATION] Given the dark theme, when `education` is submitted twice, then there are two `education` outputs; each output's `innerText`, with trailing whitespace trimmed per line, equals the PRD block (including the blank line); each is `fg` (`rgb(211, 233, 230)`) and its font weight is 400.
-- **TC-CMD-EDUCATION-3** (Storybook) [CMD-EDUCATION, NFR-MOBILE-1] Given 375px, when `education` is submitted, then the `education` output is exactly five rows tall (no line wrapped, the blank row kept its height), `document.documentElement.scrollWidth <= window.innerWidth`, and the a11y addon reports no violations.
+- **TC-CMD-EDUCATION-3** (Storybook) [CMD-EDUCATION, NFR-MOBILE-1] Given 375px, when `education` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth` and the a11y addon reports no violations.

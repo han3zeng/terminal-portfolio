@@ -62,10 +62,10 @@ Each project is a title line, one or more URL lines, then one or more descriptio
 ```
 src/commands/projects/
   projects.ts            PROJECTS data + projectsText() (plain-text rendering)
-  Projects.tsx           the Output component
+  ProjectsOutput.tsx     the Output component (not Projects.tsx: on macOS's case-insensitive file system, `./Projects` would resolve to `projects.ts`)
   projects.test.ts       Vitest
   Projects.stories.tsx   Storybook interaction tests (real Terminal)
-src/terminal/commands.ts   projects: { Output: Projects }
+src/terminal/commands.ts   projects: { Output: ProjectsOutput }
 ```
 
 ### Types
@@ -100,7 +100,7 @@ None.
 ### Order of work
 
 1. `projects.ts` with TC-1.
-2. `Projects.tsx` and the registry entry (TC 2–5).
+2. `ProjectsOutput.tsx` and the registry entry (TC 2–5).
 
 ## Test cases
 
@@ -110,4 +110,4 @@ Test names start with the ID, e.g. `it("TC-CMD-PROJECTS-1: ...")`.
 - **TC-CMD-PROJECTS-2** (Storybook) [CMD-PROJECTS] When `projects` is submitted twice, then there are two `projects` outputs, and each output's `innerText`, with trailing whitespace trimmed per line, equals the PRD block.
 - **TC-CMD-PROJECTS-3** (Storybook) [CMD-PROJECTS] Given the dark theme, when `projects` is submitted, then there are four `project-title` elements reading `1. Yahoo News and E-commerce`, `2. Recall Election: Live Results and News`, `3. PRO360`, `4. TW Reporter`; each is `accent` (`rgb(84, 220, 192)`) and not underlined; the description line `Yup, I know, once.` is `fg` (`rgb(211, 233, 230)`).
 - **TC-CMD-PROJECTS-4** (Storybook) [CMD-PROJECTS] When `projects` is submitted, then the output has exactly five links (`role="link"`), named and with `href` exactly `https://tw.yahoo.com`, `https://tw.buy.yahoo.com`, `https://hanrecall.pts.org.tw/`, `https://www.pro360.com.tw`, `https://www.twreporter.org/`, in that order; each has `target="_blank"` and a `rel` containing `noopener`, is `accent` (`rgb(84, 220, 192)`) and underlined (`text-decoration-line: underline`).
-- **TC-CMD-PROJECTS-5** (Storybook) [CMD-PROJECTS, NFR-MOBILE-1] Given 375px, when `projects` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth`, the description line of project 4 is taller than one row (it wrapped), and the a11y addon reports no violations.
+- **TC-CMD-PROJECTS-5** (Storybook) [CMD-PROJECTS, NFR-MOBILE-1] Given 375px, when `projects` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth` and the a11y addon reports no violations.

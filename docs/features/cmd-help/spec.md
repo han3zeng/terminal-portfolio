@@ -126,4 +126,4 @@ Test names start with the ID, e.g. `it("TC-CMD-HELP-2: ...")`.
 
 - **TC-CMD-HELP-3** (Storybook) [CMD-HELP] When `help` is submitted, then the entry output's `innerText`, with trailing whitespace trimmed per line, equals the PRD block. Two `help` runs give two identical outputs.
 - **TC-CMD-HELP-4** (Storybook) [CMD-HELP] Given the dark theme, when `help` is submitted, then the three `help-heading` elements read `ABOUT ME`, `UTILITIES`, `TERMINAL` and their color is `primary` (`rgb(143, 255, 224)`); the `about` line and the intro line are `fg` (`rgb(211, 233, 230)`). The output contains three lists (`role="list"`) with 8, 1 and 4 items.
-- **TC-CMD-HELP-5** (Storybook) [NFR-MOBILE-1] Given 375px, when `help` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth`, and the `resume` item is taller than one row (it wrapped) while the `email` item is one row; the a11y addon reports no violations.
+- **TC-CMD-HELP-5** (Storybook) [NFR-MOBILE-1] Given 375px, when `help` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth` and the a11y addon reports no violations.

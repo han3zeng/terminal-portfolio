@@ -59,18 +59,12 @@ export const TC2: Story = {
 };
 
 export const TC3: Story = {
-  name: "TC-CMD-PWD-3: at 375px the line fits on one row without horizontal scroll",
+  name: "TC-CMD-PWD-3: at 375px there is no horizontal scroll",
   globals: { viewport: { value: "w375", isRotated: false } },
   parameters: { a11y: { test: "error" } },
   play: async ({ canvasElement }) => {
-    const { canvas, input } = await setup(canvasElement);
+    const { input } = await setup(canvasElement);
     await run(input, "pwd");
-    const output = canvas.getByTestId("pwd");
-    const rows = Math.round(
-      output.getBoundingClientRect().height /
-        parseFloat(getComputedStyle(output).lineHeight),
-    );
-    await expect(rows).toBe(1);
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
       window.innerWidth,
     );

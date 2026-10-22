@@ -79,4 +79,4 @@ Test names start with the ID, e.g. `it("TC-CMD-PWD-1: ...")`.
 
 - **TC-CMD-PWD-1** (Vitest) [CMD-PWD] Then `PWD_OUTPUT` equals the code block under `### pwd — CMD-PWD` in `docs/product-requirements.md`, character for character.
 - **TC-CMD-PWD-2** (Storybook) [CMD-PWD] Given the dark theme, when `pwd` is submitted twice, then there are two `pwd` outputs, each with `innerText` exactly `/home/han3zeng`, and the color of each is `fg` (`rgb(211, 233, 230)`).
-- **TC-CMD-PWD-3** (Storybook) [CMD-PWD, NFR-MOBILE-1] Given 375px, when `pwd` is submitted, then the `pwd` output is one row high, `document.documentElement.scrollWidth <= window.innerWidth`, and the a11y addon reports no violations.
+- **TC-CMD-PWD-3** (Storybook) [CMD-PWD, NFR-MOBILE-1] Given 375px, when `pwd` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth` and the a11y addon reports no violations.

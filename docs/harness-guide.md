@@ -67,13 +67,13 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 | themes              | [x]  | [x]            | [x]  |
 | cmd-welcome         | [x]  | [x]            | [x]  |
 | cmd-help            | [x]  | [x]            | [x]  |
-| cmd-about           | [x]  | [ ]            | [ ]  |
-| cmd-education       | [x]  | [ ]            | [ ]  |
-| cmd-projects        | [x]  | [ ]            | [ ]  |
+| cmd-about           | [x]  | [x]            | [x]  |
+| cmd-education       | [x]  | [x]            | [x]  |
+| cmd-projects        | [x]  | [x]            | [x]  |
 | cmd-connect         | [ ]  | [ ]            | [ ]  |
 | cmd-email           | [ ]  | [ ]            | [ ]  |
 | cmd-resume          | [ ]  | [ ]            | [ ]  |
-| cmd-history         | [x]  | [ ]            | [ ]  |
+| cmd-history         | [x]  | [x]            | [x]  |
 | cmd-clear           | [x]  | [x]            | [x]  |
 | cmd-pwd, cmd-whoami | [x]  | [x]            | [x]  |
 

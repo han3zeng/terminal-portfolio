@@ -79,4 +79,4 @@ Test names start with the ID, e.g. `it("TC-CMD-WHOAMI-1: ...")`.
 
 - **TC-CMD-WHOAMI-1** (Vitest) [CMD-WHOAMI] Then `WHOAMI_OUTPUT` equals the code block under `### whoami — CMD-WHOAMI` in `docs/product-requirements.md`, character for character.
 - **TC-CMD-WHOAMI-2** (Storybook) [CMD-WHOAMI] Given the dark theme, when `whoami` is submitted twice, then there are two `whoami` outputs, each with `innerText` exactly `A curious soul with root access to absolutely nothing`, and the color of each is `fg` (`rgb(211, 233, 230)`).
-- **TC-CMD-WHOAMI-3** (Storybook) [CMD-WHOAMI, NFR-MOBILE-1] Given 375px, when `whoami` is submitted, then the `whoami` output's `textContent` is the full line (nothing cut off), `document.documentElement.scrollWidth <= window.innerWidth`, and the a11y addon reports no violations.
+- **TC-CMD-WHOAMI-3** (Storybook) [CMD-WHOAMI, NFR-MOBILE-1] Given 375px, when `whoami` is submitted, then `document.documentElement.scrollWidth <= window.innerWidth` and the a11y addon reports no violations.

@@ -82,16 +82,16 @@ e.g. themes set matrix
 
 ### Colors of the terminal parts (Han's decision)
 
-| Part                                                   | Token                    |
-| ------------------------------------------------------ | ------------------------ |
-| Page background                                        | `bg`                     |
+| Part                                                          | Token                    |
+| ------------------------------------------------------------- | ------------------------ |
+| Page background                                               | `bg`                     |
 | Prompt `strangerfornow@han3zeng:~$` and the narrow `>` marker | `primary`                |
-| Block cursor, solid and hollow                         | `primary`                |
-| Past command text, all output text                     | `fg` (inherited)         |
-| Tab hints                                              | `muted`                  |
-| Headings inside outputs (e.g. `## How to use`)         | `primary`                |
-| Links inside outputs                                   | `accent`                 |
-| `<meta name="theme-color">`                            | the current theme's `bg` |
+| Block cursor, solid and hollow                                | `primary`                |
+| Past command text, all output text                            | `fg` (inherited)         |
+| Tab hints                                                     | `muted`                  |
+| Headings inside outputs (e.g. `## How to use`)                | `primary`                |
+| Links inside outputs                                          | `accent`                 |
+| `<meta name="theme-color">`                                   | the current theme's `bg` |
 
 - The `theme-color` meta follows the theme: after a switch, and on load with a saved theme, its `content` is that theme's `bg` (upper-case hex as in the table). The static HTML still ships `#091321` (layout TC-LAYOUT-4).
 - On load it must also be right **before first paint** (so a mobile browser's toolbar doesn't show the dark color for a moment): a second small blocking inline script in `<head>`, right after the `theme-color` meta, reads `localStorage["theme"]`, and if it is one of the four themes sets the meta's `content` to that theme's `bg`. It is generated from `PALETTES`, so the values can't drift. After load, `ThemeColorMeta` (a client effect) updates the meta on every switch.
