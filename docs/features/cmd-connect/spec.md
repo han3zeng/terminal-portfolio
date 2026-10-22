@@ -104,7 +104,10 @@ src/terminal/commands.ts   connect: { Output: ConnectOutput, onSubmit }
 ```ts
 type SocialLink = { name: string; url: string };
 export const LINKS: SocialLink[]; // Substack, GitHub, LinkedIn, in that order
+export const CONNECT_INTRO = "Let's connect!";
 export const CONNECT_USAGE: { command: string; description: string }[];
+export const linkPrefix: (index: number, name: string) => string; // "  [n] " + name padded to 11
+export const usageLine: (command: string, description: string) => string; // "  " + command padded to 19
 export function connectText(kind: "list" | "usage"): string; // the PRD text, lines joined by "\n"
 export function parseConnectArgs(
   args: string[],

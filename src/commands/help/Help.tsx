@@ -2,7 +2,12 @@ import { Fragment } from "react";
 
 import type { CommandContext } from "@/terminal/types";
 
-import { HELP_INTRO, HELP_SECTIONS, helpLine } from "./helpText";
+import {
+  HELP_INTRO,
+  HELP_SECTIONS,
+  HELP_SHORTCUTS,
+  helpLine,
+} from "./helpText";
 
 // CMD-HELP: the PRD's text, one block row per line. Headings are styled rows, not <h2>s
 // (the page's only heading is the hidden <h1>); each section's lines are a list.
@@ -12,7 +17,7 @@ export function Help(props: CommandContext) {
   return (
     <div data-testid="help" className="whitespace-pre-wrap">
       <div>{HELP_INTRO}</div>
-      {HELP_SECTIONS.map((section) => (
+      {[...HELP_SECTIONS, HELP_SHORTCUTS].map((section) => (
         <Fragment key={section.heading}>
           <div>{" "}</div>
           <div data-testid="help-heading" className="text-primary">

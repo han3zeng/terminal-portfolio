@@ -79,6 +79,8 @@ src/terminal/commands.ts   projects: { Output: ProjectsOutput }
 type Project = { title: string; urls: string[]; description: string[] };
 export const PROJECTS: Project[]; // title without its number, e.g. "Yahoo News and E-commerce"
 export const PROJECTS_INTRO = "Selected projects";
+export const titleLine: (index: number, title: string) => string; // "  [n] " + title
+export const INDENT = "      "; // 6 spaces before URL and description lines
 export function projectsText(projects: Project[]): string; // the PRD text: intro, blank line, projects; lines joined by "\n"
 ```
 

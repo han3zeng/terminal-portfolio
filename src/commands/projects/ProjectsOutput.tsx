@@ -2,7 +2,11 @@ import { Fragment } from "react";
 
 import type { CommandContext } from "@/terminal/types";
 
-import { PROJECTS } from "./projects";
+import { INDENT, PROJECTS, PROJECTS_INTRO, titleLine } from "./projects";
+
+// Every project line has a 6-character hanging indent: its leading spaces are real text,
+// and wrapped rows start at 6ch, under the title text.
+const LINE = "-indent-[6ch] pl-[6ch]";
 
 // CMD-PROJECTS: titles in accent; URLs are underlined accent links opening a new tab;
 // descriptions in fg. A blank row holds a non-breaking space: an empty row would collapse.
@@ -10,14 +14,16 @@ export function ProjectsOutput(props: CommandContext) {
   void props;
   return (
     <div data-testid="projects" className="whitespace-pre-wrap">
+      <div>{PROJECTS_INTRO}</div>
       {PROJECTS.map((project, i) => (
         <Fragment key={project.title}>
-          {i > 0 && <div>{" "}</div>}
-          <div data-testid="project-title" className="text-accent">
-            {project.title}
+          <div>{" "}</div>
+          <div data-testid="project-title" className={`${LINE} text-accent`}>
+            {titleLine(i, project.title)}
           </div>
           {project.urls.map((url) => (
-            <div key={url}>
+            <div key={url} className={LINE}>
+              {INDENT}
               <a
                 href={url}
                 target="_blank"
@@ -29,7 +35,9 @@ export function ProjectsOutput(props: CommandContext) {
             </div>
           ))}
           {project.description.map((line) => (
-            <div key={line}>{line}</div>
+            <div key={line} className={LINE}>
+              {INDENT + line}
+            </div>
           ))}
         </Fragment>
       ))}

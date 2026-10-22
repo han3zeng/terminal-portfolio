@@ -13,11 +13,28 @@ export const helpLine = (name: string, description: string) =>
 
 // The keyboard shortcuts (INPUT-7), in the same column layout. Kept out of HELP_SECTIONS,
 // which lists commands only (TC-CMD-HELP-2).
-export const HELP_SHORTCUTS: HelpSection = { heading: "SHORTCUTS", lines: [] };
+export const HELP_SHORTCUTS: HelpSection = {
+  heading: "SHORTCUTS",
+  lines: [
+    { name: "Tab", description: "Autocomplete a command" },
+    { name: "↑ / ↓", description: "Browse command history" },
+    { name: "Ctrl+L", description: "Clear the screen" },
+    { name: "Ctrl+A", description: "Move cursor to start of line" },
+    { name: "Ctrl+K", description: "Delete to end of line" },
+  ],
+};
 
 // The whole output as plain text: intro, then each section, a blank line between them.
 export function helpText(): string {
-  throw new Error("not implemented");
+  return [
+    HELP_INTRO,
+    ...[...HELP_SECTIONS, HELP_SHORTCUTS].map((section) =>
+      [
+        section.heading,
+        ...section.lines.map((l) => helpLine(l.name, l.description)),
+      ].join("\n"),
+    ),
+  ].join("\n\n");
 }
 
 export const HELP_SECTIONS: HelpSection[] = [

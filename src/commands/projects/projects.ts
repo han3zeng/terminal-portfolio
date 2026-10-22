@@ -1,9 +1,9 @@
-// CMD-PROJECTS: the PRD's projects as data. A title includes its number.
+// CMD-PROJECTS: the PRD's projects as data. Numbers are added when printing.
 export type Project = { title: string; urls: string[]; description: string[] };
 
 export const PROJECTS: Project[] = [
   {
-    title: "1. Yahoo News and E-commerce",
+    title: "Yahoo News and E-commerce",
     urls: ["https://tw.yahoo.com", "https://tw.buy.yahoo.com"],
     description: [
       "Once, the most representative internet portal and index site in Taiwan.",
@@ -11,7 +11,7 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
-    title: "2. Recall Election: Live Results and News",
+    title: "Recall Election: Live Results and News",
     urls: ["https://hanrecall.pts.org.tw/"],
     description: [
       "Once upon a time, a master of corny jokes became a city mayor in Taiwan.",
@@ -19,7 +19,7 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
-    title: "3. PRO360",
+    title: "PRO360",
     urls: ["https://www.pro360.com.tw"],
     description: [
       "What?! You've never heard of PRO360?",
@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
-    title: "4. TW Reporter",
+    title: "TW Reporter",
     urls: ["https://www.twreporter.org/"],
     description: [
       "The non-profit digital news outlet in Taiwan, renowned for long-form investigative journalism.",
@@ -35,9 +35,24 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-// Plain text as printed: title, URLs, description; a blank line between projects.
+export const PROJECTS_INTRO = "Selected projects";
+
+// A title line: `  [n] ` (6 characters) then the title.
+export const titleLine = (index: number, title: string) =>
+  `  [${index + 1}] ${title}`;
+
+// URL and description lines line up with the title text.
+export const INDENT = " ".repeat(6);
+
+// Plain text as printed: intro, then title, URLs, description; a blank line between.
 export function projectsText(projects: Project[]): string {
-  return projects
-    .map((p) => [p.title, ...p.urls, ...p.description].join("\n"))
-    .join("\n\n");
+  return [
+    PROJECTS_INTRO,
+    ...projects.map((p, i) =>
+      [
+        titleLine(i, p.title),
+        ...[...p.urls, ...p.description].map((line) => INDENT + line),
+      ].join("\n"),
+    ),
+  ].join("\n\n");
 }
