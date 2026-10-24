@@ -54,7 +54,7 @@ How to add an entry: one block per session, newest at the bottom. Hours are your
 - **Insight:**
   - Need prehook setting to prevent agent from accessing original source code (
 
-### Oct 20 — Step 5: automate the loop (5 hrs)
+### Oct 21 — Step 7: automate the loop (5 hrs)
 
 - **Did:**
   - Review and update all commits messages
@@ -67,6 +67,24 @@ How to add an entry: one block per session, newest at the bottom. Hours are your
     - Import built file fro e2e without using human-friendly config file for e2e
     - uglify the code into single string and insert it
     - Use vitest to confirm SEO related tag has been set correctly inside the built html page. But the behavior is more an e2e test should be handled by playwright.
+  - Rules for agent in a sense is more about a development guide-line
+  
+
+### Oct 22 — Step 7: automate the loop (5 hrs)
+
+- **Did:**
+- **Friction:**
+  - Testing: agent create a lot of granular tests, which to me are not necessary
+    - Height of specific content
+    - Empty space at specific place, ensure the height of the space is exact number rof pixel
+- **Insight:**
+  - storybook plays the main rule of adding accessibility.
+    - List all accessibility it has used
+  - I learn the Standard Web Content Accessibility Guidelines (WCAG) require a minimum ratio of 4.5:1 for normal text 
+  - I just skim-through the spec that agent creates, but really focus on what has been changed in PRD
+  - Before asking the agent to create the spec, we need to clearly specify what kind of behavior we want to test.
+
+
   
 
 
@@ -89,9 +107,12 @@ Ideas to collect as you go, so the post writes itself:
   - The specs generate by skill are just too granular
 - The agent act on its own to find out the source code
 
-
+- I think the whole agentic development process is moving mentality from implementing features to knowing the exact possible scenarios and reduce the vibe to precise reality.
 
 ### TO Understand
 - pre hook vs. permission on setting rules
+
+## TODO
+- I need to add accessibility, interaction and coverage in test:stroybook pipeline 
 
 
