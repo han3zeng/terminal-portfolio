@@ -28,7 +28,7 @@ Shoot me an email, let's chat: hanyutseng.hyt@gmail.com
 - **The address is a link** (Han, 2026-10-22): an `<a>` whose text is `hanyutseng.hyt@gmail.com` and `href` is `mailto:hanyutseng.hyt@gmail.com`, `accent`, underlined. It has no `target` (a `mailto:` link opens the mail client, not a page). It is the fallback when the automatic navigation does nothing (no mail client set up); the address stays selectable so it can be copied.
 - The blank line is a full-height empty row (non-breaking space), as in `help`.
 - Running `email` again prints the same output again (and opens the mail client again: one side effect per submit).
-- At 375px the lines wrap at word boundaries; the address never overflows (`break-all` on the link). No horizontal page scroll (NFR-MOBILE-1).
+- At 375px the lines wrap at word boundaries; the address never overflows. It wraps as a whole word when it does not fit (`overflow-wrap: break-word`, not `break-all`, which split it as `hany` / `utseng` at 375px). No horizontal page scroll (NFR-MOBILE-1).
 
 ### Side effect (CMD-EMAIL, INPUT-6)
 
@@ -54,7 +54,7 @@ Shoot me an email, let's chat: hanyutseng.hyt@gmail.com
 
 ```
 src/commands/email/
-  email.ts              EMAIL_ADDRESS, MAILTO, EMAIL_LINES, emailText()
+  email.ts              EMAIL_ADDRESS, MAILTO, EMAIL_QUOTE, EMAIL_INVITE, EMAIL_LEAD (the last line before the address), emailText()
   EmailOutput.tsx       the Output component (not Email.tsx: on macOS's case-insensitive file system, `./Email` would resolve to `email.ts`)
   email.test.ts         Vitest
   Email.stories.tsx     Storybook interaction tests (real Terminal)
@@ -89,7 +89,7 @@ export type CommandEffects = {
   <div>Barney: "Ted, say 'I'm' your best friend."</div>
   <div>&nbsp;</div>
   <div>Well, hey, you! Be my best friend!</div>
-  <div>Shoot me an email, let's chat: <a href="mailto:…" class="text-accent underline break-all">hanyutseng.hyt@gmail.com</a></div>
+  <div>Shoot me an email, let's chat: <a href="mailto:…" class="text-accent underline wrap-break-word">hanyutseng.hyt@gmail.com</a></div>
 </div>
 ```
 

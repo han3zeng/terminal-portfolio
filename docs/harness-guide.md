@@ -70,9 +70,9 @@ Follow the "Workflow: TDD" section in `CLAUDE.md`, prompting each step yourself.
 | cmd-about           | [x]  | [x]            | [x]  |
 | cmd-education       | [x]  | [x]            | [x]  |
 | cmd-projects        | [x]  | [x]            | [x]  |
-| cmd-connect         | [ ]  | [ ]            | [ ]  |
-| cmd-email           | [ ]  | [ ]            | [ ]  |
-| cmd-resume          | [ ]  | [ ]            | [ ]  |
+| cmd-connect         | [x]  | [x]            | [x]  |
+| cmd-email           | [x]  | [x]            | [x]  |
+| cmd-resume          | [x]  | [x]            | [x]  |
 | cmd-history         | [x]  | [x]            | [x]  |
 | cmd-clear           | [x]  | [x]            | [x]  |
 | cmd-pwd, cmd-whoami | [x]  | [x]            | [x]  |
